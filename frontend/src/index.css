@@ -1,0 +1,12 @@
+main {
+  min-height: 80vh; /* Set the min-height of the main element to 80% of the viewport height */
+}
+
+h3 { 
+  padding: 1rem 0;
+}
+
+.rating span{
+  margin: 0.1rem;
+}
+
