@@ -1,8 +1,8 @@
 # Orbital [Difficulty : Apollo]
 ### HawkHub by Team J&K
 # Team Members:
-Lim Jacob
-Yow Siao Kang
+* Lim Jacob
+* Yow Siao Kang
 
 ### Proposal
 * Link to documentation : [Here](https://docs.google.com/document/d/1VQNtV1cnkjwhEdWeBjb4UvMrtX3jeXODyBoprtAoZ4M/edit#)
