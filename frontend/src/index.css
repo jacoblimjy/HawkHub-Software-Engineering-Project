@@ -10,3 +10,49 @@ h3 {
   margin: 0.1rem;
 }
 
+/* Sidebar */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.hawkhub-logo {
+  width: 140px; /* Adjust the width as needed */
+}
+
+.list-item {
+  /* Custom styles for the ListItem component */
+  position: relative;
+  padding-left: 16px; /* Add left padding */
+  padding-right: 16px; /* Add right padding */
+}
+.list-item:before {
+  /* Custom styles for the ::before pseudo-element of the ListItem component */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background-color: white;
+}
+
+.list-item {
+  /* Custom styles for the ListItem component */
+  position: relative; /* Add positioning for ::before pseudo-element */
+  border-radius: 30px; 
+}
+
+.list-item:hover {
+  /* Custom styles for the ListItem component on hover */
+  background-color: rgba(255, 166, 0, 0.707);
+
+}
+
+.list-item:hover .list-item-text {
+  /* Custom styles for the ListItemText component on hover */
+  color: white;
+}
+
