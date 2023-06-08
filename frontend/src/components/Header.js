@@ -1,54 +1,92 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
-import { logout } from "../actions/userActions";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppBar, Toolbar, Typography, Button, Container, IconButton, Menu, MenuItem } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { logout } from '../actions/userActions';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
+import AccountCircleIcon from '@mui/icons-material/AccountCircleOutlined';
+import Sidebar from './Sidebar';
+import MenuIcon from '@mui/icons-material/Menu';
 
 function Header() {
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
-  const userLogin = useSelector((state) => state.userLogin); //this line is for getting the userLogin state from the store
-  const { userInfo } = userLogin; //this line is for getting the userInfo from the userLogin state
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
+  //user menu
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
   const logoutHandler = () => {
     dispatch(logout());
   };
+  
+  //sidebar
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  return(
-  <header>
-    <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
-      <Container>
-        <LinkContainer to="/">
-            <Navbar.Brand>HawkHub</Navbar.Brand>
-        </LinkContainer>
+  const handleSidebarOpen = () => {
+    setSidebarOpen(true);
+  };
+  
+  const handleSidebarClose = () => {
+    setSidebarOpen(false);
+  };
+  
 
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
+  return (
+    <AppBar position="static" color="primary" sx={{ backgroundColor: 'orange' }}>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Sidebar open={sidebarOpen} onClose={handleSidebarClose} />
+          <div>
+          <Button edge="start" color="inherit" aria-label="menu" onClick={handleSidebarOpen}>
+            <MenuIcon />
+          </Button>
+          <Typography variant="body3" component={Link} to="/" sx={{ textDecoration: 'none', color: 'inherit' }} fontWeight="bold">
+            HawkHub
+          </Typography>
+          </div>
+          <div>
+            <Button component={Link} to="/cart" color="inherit" startIcon={<ShoppingCartIcon />}>
+              Cart
+            </Button>
 
-            <LinkContainer to="/cart">
-                <Nav.Link><i className="fas fa-shopping-cart">Cart</i></Nav.Link>
-            </LinkContainer>
+            {userInfo ? (
+              <React.Fragment>
+                <Button
+                  color="inherit"
+                  startIcon={<AccountCircleIcon />}
+                  id="user-menu"
+                  onClick={handleMenuOpen}
 
-            { userInfo ? (
-              <NavDropdown title={userInfo.name} id="username">
-                <LinkContainer to="/profile">
-                  <NavDropdown.Item>Profile</NavDropdown.Item>
-                </LinkContainer>
+                >
+                  {userInfo.name}
+                </Button>
 
-                <NavDropdown.Item onClick = {logoutHandler}>Logout</NavDropdown.Item>
-              </NavDropdown>
+                <Menu id="user-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                  <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>
+                    Profile
+                  </MenuItem>
+
+                  <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+                </Menu>
+              </React.Fragment>
             ) : (
-                <LinkContainer to="/login">
-                <Nav.Link><i className="fas fa-user">Login</i></Nav.Link>
-                </LinkContainer>
+              <Button component={Link} to="/login" color="inherit" startIcon={<AccountCircleIcon />}>
+                Login
+              </Button>
             )}
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-    </header>
-  )
+          </div>
+        </Toolbar>
+    </AppBar>
+  );
 }
 
 export default Header;

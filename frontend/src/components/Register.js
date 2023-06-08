@@ -9,7 +9,7 @@ const Register = () => {
   const [success, setSuccess] = useState(false);
 
   const handleRegister = (e) => {
-    e.preventDefault();
+    e.preventDefault(); // prevent page refresh
 
     axios.post('/api/register/', { username, password, email })
       .then(response => {
@@ -27,7 +27,8 @@ const Register = () => {
         <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} required />
         <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
         <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
-        {error && <p>{error}</p>}
+        {error && <p>{error}</p>}  
+        {/* if error is not empty, display error, p means paragraph */}
         {success && <p>Registration successful! You can now log in.</p>}
         <button type="submit">Register</button>
       </form>

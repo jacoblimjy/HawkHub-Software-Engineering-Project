@@ -1,16 +1,16 @@
-import React from 'react'
-import { Container, Row, Col } from 'react-bootstrap';
+import React from 'react';
+import { Container, Typography } from '@mui/material';
 
 function Footer() {
   return (
     <footer>
-        <Container>
-            <Row>
-                <Col className='text-center py-3'>Copywrite&copy; HawkHub 2023</Col>    
-            </Row>
-        </Container>
-    </footer>    
-  )
+      <Container>
+        <Typography align="center" color="textSecondary" component="p"> 
+          &copy; HawkHub 2023
+        </Typography>
+      </Container>
+    </footer>
+  );
 }
 
-export default Footer
+export default Footer;

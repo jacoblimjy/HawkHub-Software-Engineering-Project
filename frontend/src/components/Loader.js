@@ -1,21 +1,17 @@
-import React from 'react'
-import { Spinner } from 'react-bootstrap'
+import React from 'react';
+import { CircularProgress } from '@mui/material';
 
 function Loader() {
   return (
-    <Spinner
-        animation='border'
-        role='status'
-        style = {{
-            width: '100px',
-            height: '100px',
-            margin: 'auto',
-            display: 'block'
-        }}
-    >
-
-    </Spinner>
-  )
+    <CircularProgress
+      color="primary"
+      size={100}
+      style={{
+        margin: 'auto',
+        display: 'block',
+      }}
+    />
+  );
 }
 
-export default Loader
+export default Loader;

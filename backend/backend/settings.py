@@ -38,9 +38,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "base",
-    "rest_framework",
-    "corsheaders",
+    "base", #added 
+    "rest_framework", #added
+    "corsheaders", #added corsheader is for cross origin resource sharing
 ]
 
 REST_FRAMEWORK = {

@@ -34,7 +34,7 @@ export const login = (email, password) => async (dispatch) => { //this is an act
         const { data } = await axios.post( //make a request to the backend to login
             "/api/users/login/", //the url to make the request to
             { 'username': email, 'password': password },
-            config 
+            config //pass in the config object
         );
         dispatch({
             type: USER_LOGIN_SUCCESS,
@@ -85,7 +85,7 @@ export const register = (name, email, password) => async (dispatch) => {
         dispatch({
             type: USER_LOGIN_SUCCESS,
             payload: data
-        })
+        }) 
 
         localStorage.setItem('userInfo', JSON.stringify(data))
 
@@ -113,7 +113,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
         const config = {
             headers: { //headers is an object that contains the headers of the request
                 'Content-type': 'application/json',
-                Authorization: `Bearer ${userInfo.token}`
+                Authorization: `Bearer ${userInfo.token}` 
             }
         }
 
@@ -173,7 +173,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 
         localStorage.setItem('userInfo', JSON.stringify(data))
 
-    } catch (error) {
+    } catch (error) { 
         dispatch({
             type: USER_UPDATE_PROFILE_FAIL,
             payload: error.response && error.response.data.detail
