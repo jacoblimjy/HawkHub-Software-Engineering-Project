@@ -78,8 +78,8 @@ function Sidebar({ open, onClose }) {
         </ListItem>
       </List>
       <Typography variant="body6" sx={{ position: 'absolute', bottom: '1rem', left: '1rem' }} fontSize={12} fontFamily={'Helvetica'} color={'#000000'}>
-        Empowering hawkers.<br />
-        Connecting communities
+        Empowering Hawkers.<br />
+        Connecting Communities.
       </Typography>
     </Drawer>
   );
