@@ -121,9 +121,8 @@ class Ingredient(models.Model):
         return str(self.name)
     
 class MenuItem(models.Model):
-    name = models.CharField(max_length=200, null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    ingredients = models.ManyToManyField(Ingredient)
+    name = models.CharField(max_length=200, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     price = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
     image = models.ImageField(null=True, blank=True,
@@ -132,5 +131,20 @@ class MenuItem(models.Model):
     totalSold = models.IntegerField(null=True, blank=True, default=0)
     _id = models.AutoField(primary_key=True, editable=False)
 
+    class Meta:
+        unique_together = ["user", "name"]
+
     def __str__(self):
         return str(self.name)
+    
+class MenuIngredient(models.Model):
+    menuItem = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    quantity = models.FloatField(null=True, blank=True)
+    _id = models.AutoField(primary_key=True, editable=False)
+
+    class Meta:
+        unique_together = ["menuItem", "ingredient"]
+
+    def __str__(self):
+        return self.menuItem.name + "_" + self.ingredient.name

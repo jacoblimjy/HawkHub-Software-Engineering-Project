@@ -6,12 +6,12 @@ from rest_framework.decorators import api_view, permission_classes
 # this is a class that is built into django rest framework that allows us to check if a user is authenticated or not
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
-from base.serializers import UserSerializer, UserSerializerWithToken, IngredientSerializer
+from base.serializers import UserSerializer, UserSerializerWithToken, IngredientSerializer, MenuItemSerializer, MenuIngredientSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.hashers import make_password 
 
-from base.models import UserProfile, Ingredient
+from base.models import UserProfile, Ingredient, MenuItem, MenuIngredient
 # this is a function that is built into django that allows us to hash a password
 from rest_framework import status
 
@@ -130,3 +130,106 @@ def deleteIngredient(request):
         return Response({"status": "success", "data": 'Ingredient deleted.'}, status=status.HTTP_200_OK)
     except:
         return Response({"status": "error", "data": 'Ingredient does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createMenuItem(request):
+    serializer = MenuItemSerializer(data=request.data)
+    if serializer.is_valid():
+        try:
+            serializer.save(user=request.user)
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        except:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateMenuItem(request):
+    data = request.data
+    try:
+        menuItem = MenuItem.objects.filter(user = request.user).get(pk=data['_id'])
+        serializer = MenuItemSerializer(instance=menuItem, data=request.data)
+        if serializer.is_valid():
+            try:
+                serializer.save()
+                return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+            except:
+                return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return Response({"status": "error", "data": 'Menu Item does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getMenuItems(request):
+    menuItems = MenuItem.objects.filter(user = request.user)
+    serializer = MenuItemSerializer(menuItems, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def deleteMenuItem(request):
+    data = request.data
+    try:
+        menuItem = MenuItem.objects.filter(user = request.user).get(pk=data['_id'])
+        menuItem.delete()
+        return Response({"status": "success", "data": 'Menu Item deleted.'}, status=status.HTTP_200_OK)
+    except:
+        return Response({"status": "error", "data": 'Menu Item does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createMenuIngredient(request):
+    data = request.data
+    try:
+        menuItem = MenuItem.objects.filter(user = request.user).get(pk=data['menuItem'])
+        ingredient = Ingredient.objects.filter(user = request.user).get(pk=data['ingredient'])
+
+        serializer = MenuIngredientSerializer(data=request.data)
+        if serializer.is_valid():
+                serializer.save()
+                return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return Response({"status": "error", "data": 'Menu Item or Ingredient does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateMenuIngredient(request):
+    data = request.data
+    try:
+        menuIngredient = MenuIngredient.objects.get(pk=data['_id'])
+        newQuantity = { k:v for k,v in data.items() if 'quantity' in k }
+        serializer = MenuIngredientSerializer(instance=menuIngredient, data=newQuantity, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)  
+    except:
+        return Response({"status": "error", "data": 'Menu Ingredient does not exist.'}, status=status.HTTP_400_BAD_REQUEST)        
+    
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getMenuIngredients(request):
+    try:
+        menuIngredients = MenuItem.objects.filter(user = request.user).get(pk=request.data['_id']).menuingredient_set.all()
+        serializer = MenuIngredientSerializer(menuIngredients, many=True)
+        return Response(serializer.data)
+    except:
+        return Response({"status": "error", "data": 'Menu Item does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def deleteMenuIngredient(request):
+    data = request.data
+    try:
+        menuIngredient = MenuItem.objects.filter(user = request.user).get(pk=data['menuItem_id']).menuingredient_set.get(pk=data['_id'])
+        menuIngredient.delete()
+        return Response({"status": "success", "data": 'Menu Ingredient deleted.'}, status=status.HTTP_200_OK)
+    except:
+        return Response({"status": "error", "data": 'Menu Ingredient does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
