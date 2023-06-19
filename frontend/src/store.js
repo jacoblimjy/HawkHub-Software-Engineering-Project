@@ -1,20 +1,37 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
 import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer} from "./reducers/userReducers";
-
-// npm install react-bootstrap axios react-router-dom redux react-redux redux-thunk redux-devtools-extension @reduxjs/toolkit   
+import { supplierListReducer, supplierDetailsReducer } from "./reducers/supplierReducers";
+import { productListReducer, productDetailsReducer } from "./reducers/productReducers";
+import { cartReducer } from "./reducers/cartReducers";
 
 const reducer = combineReducers({
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,
-    userUpdateProfile: userUpdateProfileReducer
+    userUpdateProfile: userUpdateProfileReducer,
+
+    supplierList: supplierListReducer,
+    supplierDetails: supplierDetailsReducer,
+
+    productList: productListReducer,
+    productDetails: productDetailsReducer,
+
+    cart: cartReducer,
 });
+
+const cartItemsFromStorage = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : []
+
+const shippingAddressFromStorage = localStorage.getItem('shippingAddress') ? JSON.parse(localStorage.getItem('shippingAddress')) : {}
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null 
 //get the user info from local storage if it exists, otherwise set it to null, then pass it into the initial state
 
 export const initialState = {
+    cart: {
+        cartItems: cartItemsFromStorage,
+        shippingAddress: shippingAddressFromStorage,
+    },
     userLogin: { userInfo: userInfoFromStorage }
 } //this is where we will add initial state, this is the state that will be used when the app is first loaded
 

@@ -42,7 +42,7 @@ def registerUser(request):
 
         userprofile = UserProfile.objects.create(
             user = user,
-            isSupplier = False,
+            isSupplier = True if data['isSupplier'] == 'true' else False 
         )
 
         serializer = UserSerializerWithToken(user, many=False)
@@ -83,3 +83,5 @@ def getUsers(request):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
+
+
