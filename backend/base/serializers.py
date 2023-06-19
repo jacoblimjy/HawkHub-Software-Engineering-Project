@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken #RefreshToken is a class that is built into django rest framework that allows us to generate a token for a user
 from base.models import UserProfile
-from .models import Supplier, Product
+from .models import Supplier, Product, UserProfile, Ingredient
 from django.contrib.auth.hashers import make_password
 
 class UserSerializer(serializers.ModelSerializer):
@@ -56,6 +56,11 @@ class UserSerializerWithToken(UserSerializer):
         token = RefreshToken.for_user(obj) #what this do is it will generate a token for the user that is passed in
         return str(token.access_token) 
     
+class IngredientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ingredient
+        exclude = ['user'] #exclude the user field from the serializer
+    
 class SupplierSerializer(serializers.ModelSerializer):
     class Meta: #this is a class that is built into django rest framework which allows us to define some options for our serializer
         model = Supplier
@@ -65,3 +70,5 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta: #this is a class that is built into django rest framework which allows us to define some options for our serializer
         model = Product
         fields = '__all__' #this will serialize all the fields in the model (Product)
+
+

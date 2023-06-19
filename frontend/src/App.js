@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomeScreen from "./screens/HomeScreen";
@@ -12,6 +12,7 @@ import ProductsScreen from "./screens/ProductsScreen";
 import ProductScreen from "./screens/ProductScreen";
 import CartScreen from "./screens/CartScreen";
 import ShippingScreen from "./screens/ShippingScreen";
+import StocktakingScreen from "./screens/StocktakingScreen.js";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
             <Route path='/login' element={<LoginScreen/>}/> 
             <Route path='/register' element={<RegisterScreen/>}/>
             <Route path='/profile' element={<ProfileScreen/>}/>
+            <Route path="/stocktaking" element={<StocktakingScreen />} />
             <Route path='/suppliers' element={<SuppliersScreen/>}/>
             <Route path='/suppliers/:supplierId/products' element={<ProductsScreen/>}/>
             <Route path='/suppliers/:supplierId/products/:productId' element={<ProductScreen/>}/>

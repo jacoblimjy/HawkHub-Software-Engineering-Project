@@ -15,6 +15,9 @@ urlpatterns = [
     path('profile/update/', views.updateUserProfile, name='users-profile-update'),
 
     path('', views.getUsers, name='users'),
-
+    path('createIngredient/', views.createIngredient, name='create-ingredient'),
+    path('updateIngredient/', views.updateIngredient, name='update-ingredient'),
+    path('getIngredients/', views.getIngredients, name='get-ingredients'),
+    path('deleteIngredient/', views.deleteIngredient, name='delete-ingredient'),
 
 ]
