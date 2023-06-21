@@ -110,7 +110,7 @@ class Ingredient(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     cost = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
-    countInStock = models.IntegerField(null=True, blank=True, default=0)
+    countInStock = models.FloatField(null=True, blank=True, default=0)
     unit = models.CharField(max_length=200, null=True, blank=True)
     expirationDate = models.DateField(auto_now_add=False, null=True, blank=True)
     _id = models.AutoField(primary_key=True, editable=False)

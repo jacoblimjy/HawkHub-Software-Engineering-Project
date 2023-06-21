@@ -97,7 +97,7 @@ def createIngredient(request):
     else:
         return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     
-@api_view(['Put'])
+@api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def updateIngredient(request):
     data = request.data
@@ -105,11 +105,10 @@ def updateIngredient(request):
         ingredient = Ingredient.objects.filter(user = request.user).get(pk=data['_id'])
         serializer = IngredientSerializer(instance=ingredient, data=request.data)
         if serializer.is_valid():
-            try:
-                serializer.save()
-                return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
-            except:
-                return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save()
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     except:
         return Response({"status": "error", "data": 'Ingredient does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
     
@@ -196,22 +195,51 @@ def createMenuIngredient(request):
         return Response({"status": "error", "data": 'Menu Item or Ingredient does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
     
 
-@api_view(['PUT'])
+# @api_view(['PUT'])
+# @permission_classes([IsAuthenticated])
+# def updateMenuIngredient(request):
+#     data = request.data
+#     try:
+#         menuIngredient = MenuIngredient.objects.get(pk=data['_id'])
+#         newQuantity = { k:v for k,v in data.items() if 'quantity' in k }
+#         serializer = MenuIngredientSerializer(instance=menuIngredient, data=newQuantity, partial=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+#         else:
+#             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)  
+#     except:
+#         return Response({"status": "error", "data": 'Menu Ingredient does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def updateMenuIngredient(request):
     data = request.data
     try:
-        menuIngredient = MenuIngredient.objects.get(pk=data['_id'])
-        newQuantity = { k:v for k,v in data.items() if 'quantity' in k }
-        serializer = MenuIngredientSerializer(instance=menuIngredient, data=newQuantity, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
-        else:
-            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)  
-    except:
-        return Response({"status": "error", "data": 'Menu Ingredient does not exist.'}, status=status.HTTP_400_BAD_REQUEST)        
+        menuItem = MenuItem.objects.filter(user = request.user).get(pk=data['menuItem_id'])
+        ingredients = menuItem.menuingredient_set.all()
+        for add_ingredient in data['add']:
+            if ingredients.filter(ingredient=add_ingredient['ingredient']).exists():
+                menuIngredient = ingredients.get(ingredient=add_ingredient['ingredient'])
+                menuIngredient.quantity = add_ingredient['quantity']
+                menuIngredient.save()
+            else:
+                add_ingredient['menuItem'] = menuItem._id
+                serializer = MenuIngredientSerializer(data=add_ingredient)
+                if serializer.is_valid():
+                    serializer.save(menuItem=menuItem)
+                else:
+                    return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        
+        for remove_ingredient in data['remove']:
+            if ingredients.filter(ingredient=remove_ingredient['ingredient']).exists():
+                menuIngredient = ingredients.get(ingredient=remove_ingredient['ingredient'])
+                menuIngredient.delete()
+
+        return Response({"status": "success", "data": 'Menu Ingredients updated.'}, status=status.HTTP_200_OK)
     
+    except Exception as err:
+        return Response({"status": "error", "data": str(err)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
