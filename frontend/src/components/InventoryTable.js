@@ -9,7 +9,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
-import AddIcon from "@mui/icons-material/Add";
 import InventoryAdder from "./InventoryAdder";
 
 function dateSetter(params) {
@@ -82,7 +81,7 @@ export default function InventoryTable() {
         },
       };
 
-      axios.post(`/api/users/deleteIngredient/`, { _id: id }, config);
+      axios.post(`/api/ingredients/deleteIngredient/`, { _id: id }, config);
       setChange(!change);
     } catch (error) {
       console.log(error);
@@ -124,7 +123,7 @@ export default function InventoryTable() {
         },
       };
 
-      axios.put(`/api/users/updateIngredient/`, newRow, config);
+      await axios.put(`/api/ingredients/updateIngredient/`, newRow, config);
 
       const response = await mutateRow(newRow);
       setSnackbar({
@@ -135,7 +134,7 @@ export default function InventoryTable() {
       setPromiseArguments(null);
     } catch (error) {
       setSnackbar({
-        children: "Name can't be empty and must be unique",
+        children: Object.values(error.response.data.data)[0],
         severity: "error",
       });
       reject(oldRow);
@@ -191,9 +190,11 @@ export default function InventoryTable() {
           },
         };
 
-        axios.get(`/api/users/getIngredients/`, config).then((response) => {
-          setTableData(response.data);
-        });
+        axios
+          .get(`/api/ingredients/getIngredients/`, config)
+          .then((response) => {
+            setTableData(response.data);
+          });
       } catch (error) {
         console.log(error);
       }
@@ -260,7 +261,7 @@ export default function InventoryTable() {
   return (
     <div style={{ width: "100%" }}>
       {renderConfirmDialog()}
-      <InventoryAdder />
+      <InventoryAdder change={change} setChange={setChange} />
       <DataGrid
         autoHeight
         rows={tableData}
@@ -268,7 +269,7 @@ export default function InventoryTable() {
         pageSize={12}
         getRowId={(row) => row._id}
         processRowUpdate={processRowUpdate}
-        className="my-1"
+        onProcessRowUpdateError={(error) => {}}
       />
       {!!snackbar && (
         <Snackbar open onClose={handleCloseSnackbar} autoHideDuration={6000}>

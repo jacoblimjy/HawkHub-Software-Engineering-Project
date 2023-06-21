@@ -6,12 +6,10 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 
-export default function InventoryAdder() {
+export default function InventoryAdder({ change, setChange }) {
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [category, setCategory] = React.useState("");
@@ -28,7 +26,8 @@ export default function InventoryAdder() {
     setOpen(false);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setOpen(false);
     try {
       const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -50,15 +49,20 @@ export default function InventoryAdder() {
         expirationDate: expirationDate,
       };
 
-      await axios.post(`/api/users/createIngredient/`, data, config);
+      await axios.post(`/api/ingredients/createIngredient/`, data, config);
     } catch (error) {
       console.log(error);
     }
+    setChange(!change);
   };
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button
+        variant="outlined"
+        onClick={handleClickOpen}
+        sx={{ marginBottom: 1 }}
+      >
         Add Ingredient
       </Button>
       <Dialog open={open} onClose={handleClose}>
@@ -120,12 +124,12 @@ export default function InventoryAdder() {
                 sx={{ width: 1 / 2, m: 1 }}
                 onChange={(e) => setCountInStock(e.target.value)}
                 type="number"
+                inputProps={{ step: "0.01" }}
               />
               <TextField
                 required
                 error={unit === ""}
                 select
-                labelId="unit"
                 id="unit"
                 label="unit"
                 onChange={(e) => setUnit(e.target.value)}
@@ -154,6 +158,7 @@ export default function InventoryAdder() {
                 sx={{ width: 1 / 2, m: 1 }}
                 onChange={(e) => setCost(e.target.value)}
                 type="number"
+                inputProps={{ step: "0.01" }}
               />
               <TextField
                 required

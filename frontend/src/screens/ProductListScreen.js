@@ -31,12 +31,13 @@ function ProductListScreen({ }) {
     const getSupplier = useSelector(state => state.getSupplier)
     const { supplier } = getSupplier
 
+
     // console.log(supplier)
 
     useEffect(() => {
         dispatch({ type: PRODUCT_CREATE_RESET })
 
-        dispatch(getSupplierByUserId(supplier._id))
+        dispatch(getSupplierByUserId(userInfo._id))
 
         if (!userInfo.isAdmin) {
             navigate('/login')
