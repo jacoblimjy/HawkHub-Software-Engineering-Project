@@ -10,7 +10,6 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import axios from "axios";
 import IngredientTransferList from "./IngredientTransferList";
-import { GridColumnsPanel } from "@mui/x-data-grid";
 
 export default function IngredientEditer({ item, change, setChange }) {
   const [open, setOpen] = React.useState(false);
@@ -33,7 +32,10 @@ export default function IngredientEditer({ item, change, setChange }) {
             Authorization: `Bearer ${userInfo.token}`,
           },
         };
-        const { data } = await axios.get(`/api/users/getIngredients/`, config);
+        const { data } = await axios.get(
+          `/api/ingredients/getIngredients/`,
+          config
+        );
 
         for (let i = 0; i < item.ingredients.length; i++) {
           const ingredient = item.ingredients[i];
@@ -105,9 +107,9 @@ export default function IngredientEditer({ item, change, setChange }) {
         remove: remove,
       };
 
-      await axios.post(`/api/users/updateMenuIngredient/`, data, config);
+      await axios.post(`/api/menu/updateMenuIngredient/`, data, config);
       await axios.put(
-        "/api/users/updateMenuItem/",
+        "/api/menu/updateMenuItem/",
         { _id: item._id, price: price },
         config
       );

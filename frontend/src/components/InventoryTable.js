@@ -9,7 +9,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
-import AddIcon from "@mui/icons-material/Add";
 import InventoryAdder from "./InventoryAdder";
 
 function dateSetter(params) {
@@ -82,7 +81,7 @@ export default function InventoryTable() {
         },
       };
 
-      axios.post(`/api/users/deleteIngredient/`, { _id: id }, config);
+      axios.post(`/api/ingredients/deleteIngredient/`, { _id: id }, config);
       setChange(!change);
     } catch (error) {
       console.log(error);
@@ -124,7 +123,7 @@ export default function InventoryTable() {
         },
       };
 
-      await axios.put(`/api/users/updateIngredient/`, newRow, config);
+      await axios.put(`/api/ingredients/updateIngredient/`, newRow, config);
 
       const response = await mutateRow(newRow);
       setSnackbar({
@@ -191,9 +190,11 @@ export default function InventoryTable() {
           },
         };
 
-        axios.get(`/api/users/getIngredients/`, config).then((response) => {
-          setTableData(response.data);
-        });
+        axios
+          .get(`/api/ingredients/getIngredients/`, config)
+          .then((response) => {
+            setTableData(response.data);
+          });
       } catch (error) {
         console.log(error);
       }

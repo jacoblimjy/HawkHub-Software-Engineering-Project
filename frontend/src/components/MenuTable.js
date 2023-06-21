@@ -31,7 +31,7 @@ export default function MenuTable() {
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
-      await axios.post(`/api/users/deleteMenuItem/`, { _id: id }, config);
+      await axios.post(`/api/menu/deleteMenuItem/`, { _id: id }, config);
     } catch (error) {
       console.log(error);
     }
@@ -90,7 +90,7 @@ export default function MenuTable() {
             Authorization: `Bearer ${userInfo.token}`,
           },
         };
-        const { data } = await axios.get("/api/users/getMenuItems", config);
+        const { data } = await axios.get("/api/menu/getMenuItems", config);
         setMenuItems(data);
       } catch (error) {
         console.log(error);

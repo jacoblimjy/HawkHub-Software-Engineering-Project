@@ -6,9 +6,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import axios from "axios";
@@ -48,7 +45,7 @@ export default function MenuAdder({ change, setChange }) {
         price: price,
       };
 
-      await axios.post(`/api/users/createMenuItem/`, data, config);
+      await axios.post(`/api/menu/createMenuItem/`, data, config);
       //   setSnackbar({
       //     children: "Menu Item successfully added",
       //     severity: "success",

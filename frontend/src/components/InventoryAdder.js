@@ -6,9 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 
 export default function InventoryAdder({ change, setChange }) {
@@ -51,7 +49,7 @@ export default function InventoryAdder({ change, setChange }) {
         expirationDate: expirationDate,
       };
 
-      await axios.post(`/api/users/createIngredient/`, data, config);
+      await axios.post(`/api/ingredients/createIngredient/`, data, config);
     } catch (error) {
       console.log(error);
     }
