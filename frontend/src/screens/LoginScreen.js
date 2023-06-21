@@ -16,7 +16,7 @@ function LoginScreen({ history }) {
   const dispatch = useDispatch();
   const location = useLocation(); //useLocation is a hook that returns the location object that represents the current URL, it is similar to history, but it has more information, such as the query string
   const navigate = useNavigate(); //useNavigate is a hook that returns a navigate function, which is used to navigate to a new location, it is similar to history.push, but it has more functionality, such as the ability to navigate to a new location without adding a new entry into the history stack, which is useful for redirects
-  const redirect = location.search ? location.search.split("=")[1] : "/";
+  const redirect = location.search ? location.search.split("=")[1] : "/"; 
 
   const userLogin = useSelector((state) => state.userLogin); //get the userLogin from the state, state is the global state of the app, which is stored in the redux store, a state is a snapshot of the app at a given time
   const { error, loading, userInfo } = userLogin; //destructure the userLogin object into loading, error, and userInfo

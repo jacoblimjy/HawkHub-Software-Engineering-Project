@@ -42,3 +42,15 @@ def getSupplierProduct(request, pk, pk2):
     serializer = ProductSerializer(product, many=False)
     return Response(serializer.data)
 
+
+@api_view(['GET'])
+def getSupplierByUserId(request, pk):
+    try:
+        user = User.objects.get(id=pk)
+        supplier = user.supplier_set.first()
+        serializer = SupplierSerializer(supplier)
+        return Response(serializer.data)
+    except:
+        message = {'detail': 'Supplier does not exist'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+

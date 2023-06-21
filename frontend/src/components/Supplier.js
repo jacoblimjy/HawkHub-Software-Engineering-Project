@@ -28,7 +28,7 @@ function Supplier({ supplier }) {
               value={supplier.rating}
               text={`${supplier.numReviews} reviews`}
               color={"#f8e825"}
-            />
+            />{" "}
           </div>
         </Card.Text>
       </Card.Body>

@@ -10,7 +10,7 @@ function Product({ product }) {
         <Card.Img
           src={product.image}
           className="rounded mx-auto d-block"
-          style={{ width: "100%", height: "200px", objectFit: "contain" }} 
+          style={{ width: "100%", height: "200px", objectFit: "contain" }}
           // other than cover, you can use contain, fill, none, scale-down
         />
       </a>

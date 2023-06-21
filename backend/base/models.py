@@ -25,7 +25,9 @@ class Supplier(models.Model):
 
     def __str__(self):
         return str(self.user.username)
-    
+
+    # def __str__(self):
+    #     return str(self.user.supplier_set.first()._id)
 
 class Product(models.Model):
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True)
@@ -72,8 +74,8 @@ class Order(models.Model):
     isDelivered = models.BooleanField(default=False)
     deliveredAt = models.DateTimeField(
         auto_now_add=False, null=True, blank=True)
-    createdAt = models.DateTimeField(auto_now_add=True)
-    _id = models.AutoField(primary_key=True, editable=False)
+    createdAt = models.DateTimeField(auto_now_add=True) 
+    _id = models.AutoField(primary_key=True, editable=False) 
 
     def __str__(self):
         return str(self.createdAt)

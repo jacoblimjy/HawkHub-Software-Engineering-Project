@@ -6,4 +6,5 @@ urlpatterns = [
     path('<str:pk>/', views.getSupplier, name='supplier'),
     path('<str:pk>/products/', views.getSupplierProducts, name='supplier-products'),
     path('<str:pk>/products/<str:pk2>/', views.getSupplierProduct, name='supplier-product'),
+    path('user/<str:pk>/', views.getSupplierByUserId, name='user-supplier'),
 ]

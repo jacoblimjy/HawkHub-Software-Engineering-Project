@@ -1,9 +1,10 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
 import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer} from "./reducers/userReducers";
-import { supplierListReducer, supplierDetailsReducer } from "./reducers/supplierReducers";
-import { productListReducer, productDetailsReducer } from "./reducers/productReducers";
+import { supplierListReducer, supplierDetailsReducer, getSupplierReducer } from "./reducers/supplierReducers";
+import { productListReducer, productDetailsReducer, productDeleteReducer, productCreateReducer, productUpdateReducer} from "./reducers/productReducers";
 import { cartReducer } from "./reducers/cartReducers";
+import { orderCreateReducer, orderDetailsReducer, orderPayReducer, orderListMyReducer, orderListReducer, orderDeliverReducer} from "./reducers/orderReducers";
 
 const reducer = combineReducers({
     userLogin: userLoginReducer,
@@ -13,11 +14,22 @@ const reducer = combineReducers({
 
     supplierList: supplierListReducer,
     supplierDetails: supplierDetailsReducer,
+    getSupplier: getSupplierReducer,
 
     productList: productListReducer,
     productDetails: productDetailsReducer,
+    productDelete: productDeleteReducer,
+    productCreate: productCreateReducer,
+    productUpdate: productUpdateReducer,
 
     cart: cartReducer,
+
+    orderCreate: orderCreateReducer,
+    orderDetails: orderDetailsReducer,
+    orderPay: orderPayReducer,
+    orderListMy: orderListMyReducer,
+    orderList: orderListReducer,
+    orderDeliver: orderDeliverReducer,
 });
 
 const cartItemsFromStorage = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : []

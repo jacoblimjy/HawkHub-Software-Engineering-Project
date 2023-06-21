@@ -23,6 +23,10 @@ function CartScreen({}) {
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+
   //   const subtotalItems = cartItems.reduce((acc, item) => acc + item.qty, 0);
 
   useEffect(() => {
@@ -37,7 +41,7 @@ function CartScreen({}) {
   };
 
   const checkoutHandler = () => {
-    navigate("/login?redirect=shipping"); //login because we need to login before we can checkout
+    navigate("/shipping"); //login because we need to login before we can checkout,
   };
 
   return (
@@ -114,20 +118,28 @@ function CartScreen({}) {
               </body>
               {cartItems
                 .reduce((acc, item) => acc + item.qty * item.price, 0)
-                .toFixed(2)}
+                .toFixed(2)} {/* toFixed(2) -> 2 decimal places */}
             </ListGroup.Item>
           </ListGroup>
 
-          <ListGroup.Item>
-            <Button
-              type="button"
-              className="btn-block"
-              disabled={cartItems.length === 0}
-              onClick={checkoutHandler}
-            >
-              Proceed To Checkout
-            </Button>
-          </ListGroup.Item>
+            {userInfo ? (
+            <ListGroup.Item>
+              <Button
+                type="button"
+                className="btn-block"
+                disabled={cartItems.length === 0}
+                onClick={checkoutHandler}
+              >
+                Proceed To Checkout
+              </Button>
+            </ListGroup.Item>
+          ) : (
+            <ListGroup.Item>
+              <Link to="/login" className="btn btn-block">
+                Log in to Proceed
+              </Link>
+            </ListGroup.Item>
+          )}
         </Card>
       </Col>
     </Row>

@@ -99,6 +99,15 @@ function Sidebar({ open, onClose }) {
         </ListItem>
       </List>
       <List sx={{ mt: "1rem" }}>
+      <ListItem
+          Button
+          component={Link}
+          to="/admin/productlist"
+          onClick={handleDrawerClose}
+          className="list-item"
+        >
+          <ListItemText primary="ProductList" className="list-item-text" />
+        </ListItem>
         <ListItem
           Button
           component={Link}

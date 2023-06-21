@@ -7,12 +7,17 @@ import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen.js";
 import ProfileScreen from "./screens/ProfileScreen.js";
+import StocktakingScreen from "./screens/StocktakingScreen.js";
 import SuppliersScreen from "./screens/SuppliersScreen.js";
 import ProductsScreen from "./screens/ProductsScreen";
 import ProductScreen from "./screens/ProductScreen";
 import CartScreen from "./screens/CartScreen";
 import ShippingScreen from "./screens/ShippingScreen";
-import StocktakingScreen from "./screens/StocktakingScreen.js";
+import PaymentScreen from "./screens/PaymentScreen";
+import PlaceOrderScreen from "./screens/PlaceOrderScreen";
+import OrderScreen from "./screens/OrderScreen";
+import ProductListScreen from "./screens/ProductListScreen";
+import ProductEditScreen from "./screens/ProductEditScreen";
 
 const App = () => {
   return (
@@ -31,6 +36,11 @@ const App = () => {
             <Route path='/suppliers/:supplierId/products/:productId' element={<ProductScreen/>}/>
             <Route path='/cart/:productId?' element={<CartScreen/>}/>
             <Route path='/shipping' element={<ShippingScreen/>}/>
+            <Route path='/payment' element={<PaymentScreen/>}/>
+            <Route path='/placeorder' element={<PlaceOrderScreen/>}/>
+            <Route path='/order/:orderId' element={<OrderScreen/>}/>
+            <Route path='/admin/productlist' element={<ProductListScreen/>}/> 
+            <Route path='/admin/:supplierId/product/:productId/edit' element={<ProductEditScreen/>}/> 
           </Routes>
         </Container>
       </main>

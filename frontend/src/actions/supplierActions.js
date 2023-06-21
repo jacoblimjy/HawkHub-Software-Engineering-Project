@@ -6,6 +6,10 @@ import {
     SUPPLIER_DETAILS_REQUEST,
     SUPPLIER_DETAILS_SUCCESS,
     SUPPLIER_DETAILS_FAIL,
+
+    GET_SUPPLIER_REQUEST,
+    GET_SUPPLIER_SUCCESS,
+    GET_SUPPLIER_FAIL,
 } from "../constants/supplierConstants";
 import axios from "axios";
 
@@ -44,3 +48,23 @@ export const listSupplierDetails = (id) => async (dispatch) => {
         });
     }
 }
+
+export const getSupplierByUserId = (userId) => async (dispatch) => {
+  try {
+    dispatch({ type: GET_SUPPLIER_REQUEST });
+
+    const { data } = await axios.get(`/api/suppliers/user/${userId}`); // Replace with your actual API endpoint
+
+    dispatch({
+      type: GET_SUPPLIER_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_SUPPLIER_FAIL,
+      payload: error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message,
+    });
+  }
+};
