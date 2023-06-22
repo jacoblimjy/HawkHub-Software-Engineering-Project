@@ -152,3 +152,20 @@ class MenuIngredient(models.Model):
 
     def __str__(self):
         return self.menuItem.name + "_" + self.ingredient.name
+    
+class Financial(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add=False, null=True, blank=True)
+    revenue = models.DecimalField( max_digits=7, decimal_places=2, null=True, blank=True)
+    cost = models.DecimalField( max_digits=7, decimal_places=2, null=True, blank=True)
+    adminCost = models.DecimalField( max_digits=7, decimal_places=2, null=True, blank=True, default=0)
+    _id = models.AutoField(primary_key=True, editable=False)
+
+    class Meta:
+        unique_together = ["user", "date"]
+
+    def __str__(self):
+        return str(self.user) + "_" + str(self.date)
+
+    
+     

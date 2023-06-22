@@ -3,8 +3,10 @@ from rest_framework.decorators import api_view, permission_classes
 # this is a class that is built into django rest framework that allows us to check if a user is authenticated or not
 from rest_framework.permissions import IsAuthenticated
 from base.serializers import MenuItemSerializer, MenuIngredientSerializer
-from base.models import Ingredient, MenuItem
+from base.models import Ingredient, MenuItem, Financial
 from rest_framework import status
+from datetime import date
+from decimal import Decimal
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -137,3 +139,36 @@ def deleteMenuIngredient(request):
         return Response({"status": "success", "data": 'Menu Ingredient deleted.'}, status=status.HTTP_200_OK)
     except:
         return Response({"status": "error", "data": 'Menu Ingredient does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def sellMenuItem(request):
+    data = request.data
+    num_Sold = int(data['num_Sold'])
+    try:
+        menuItem = MenuItem.objects.filter(user = request.user).get(pk=data['_id'])
+        menuIngredients = menuItem.menuingredient_set.all()
+        cost = 0
+        for menuIngredient in menuIngredients:
+            ingredient = menuIngredient.ingredient
+            ingredient.countInStock -= menuIngredient.quantity * num_Sold
+            ingredient.save()
+            cost += float(ingredient.cost) * menuIngredient.quantity * num_Sold
+
+        if Financial.objects.filter(user = request.user).exists():
+            financial = Financial.objects.filter(user = request.user).latest('date')
+            if financial.date.month == date.today().month:
+                financial.cost += Decimal(cost)
+                financial.revenue += menuItem.price * num_Sold
+                financial.save()
+            else:
+                financial = Financial.objects.create(user = request.user, cost=Decimal(cost), revenue=menuItem.price * num_Sold, date=date.today())
+        
+        else:
+            financial = Financial.objects.create(user = request.user, cost=Decimal(cost), revenue=menuItem.price * num_Sold, date=date.today())
+            
+        
+
+        return Response({"status": "success", "data": 'Menu Item sold.'}, status=status.HTTP_200_OK)
+    except Exception as err:
+        return Response({"status": "error", "data": str(err)}, status=status.HTTP_400_BAD_REQUEST)
