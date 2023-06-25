@@ -142,6 +142,6 @@ class FinancialSerializer(serializers.ModelSerializer):
         exclude = ['user'] #exclude the user field from the serializer
 
     def get_profit(self, obj):
-        return obj.revenue - obj.cost - obj.adminCost
+        return "{0:.2f}".format(obj.revenue - obj.cost - obj.adminCost)
     
 

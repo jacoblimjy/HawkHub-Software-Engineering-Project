@@ -9,7 +9,7 @@ from rest_framework import status
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getFinancials(request):
-    financials = Financial.objects.filter(user = request.user).order_by('-_id')
+    financials = Financial.objects.filter(user = request.user).order_by('date')
     serializer = FinancialSerializer(financials, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
