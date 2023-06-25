@@ -70,7 +70,7 @@ function Sidebar({ open, onClose }) {
         <ListItem
           Button
           component={Link}
-          to="/"
+          to="/finance"
           onClick={handleDrawerClose}
           className="list-item"
         >
@@ -79,7 +79,13 @@ function Sidebar({ open, onClose }) {
           </ListItemIcon>
           <ListItemText primary="FinanceTracker" className="list-item-text" />
         </ListItem>
-        <ListItem Button component={Link} to="/suppliers/" onClick={handleDrawerClose} className="list-item">
+        <ListItem
+          Button
+          component={Link}
+          to="/suppliers/"
+          onClick={handleDrawerClose}
+          className="list-item"
+        >
           <ListItemIcon sx={{ minWidth: 32 }}>
             <StorefrontIcon sx={{ marginBottom: "4px" }} />
           </ListItemIcon>
@@ -99,7 +105,7 @@ function Sidebar({ open, onClose }) {
         </ListItem>
       </List>
       <List sx={{ mt: "1rem" }}>
-      <ListItem
+        <ListItem
           Button
           component={Link}
           to="/admin/productlist"

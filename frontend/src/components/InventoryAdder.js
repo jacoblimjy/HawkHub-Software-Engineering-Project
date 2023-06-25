@@ -152,7 +152,7 @@ export default function InventoryAdder({ change, setChange }) {
               <TextField
                 required
                 error={cost === ""}
-                label="Cost"
+                label="Cost Per Unit"
                 id="cost"
                 size="small"
                 sx={{ width: 1 / 2, m: 1 }}
