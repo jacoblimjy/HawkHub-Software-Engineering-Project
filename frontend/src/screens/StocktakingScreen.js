@@ -2,6 +2,7 @@ import * as React from "react";
 import InventoryAdder from "../components/InventoryAdder";
 import InventoryTable from "../components/InventoryTable";
 import MenuTable from "../components/MenuTable";
+import MenuAdder from "../components/MenuAdder";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,6 +36,9 @@ export default function StocktakingScreen() {
         <br />
         <Grid item xs={12} md={8} lg={9} align="left" sx={{ pt: 0 }}>
           <h1>Menu</h1>
+        </Grid>
+        <Grid item xs={12} md={4} lg={3} align="right" sx={{ pt: 0 }}>
+          <MenuAdder />
         </Grid>
         <Grid item xs={12}>
           <MenuTable />

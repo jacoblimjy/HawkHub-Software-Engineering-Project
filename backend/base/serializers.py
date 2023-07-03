@@ -112,6 +112,8 @@ class OrderSerializer(serializers.ModelSerializer):
     
 class MenuItemSerializer(serializers.ModelSerializer):
     ingredients = serializers.SerializerMethodField(read_only=True)
+    cost = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = MenuItem
         exclude = ['user'] #exclude the user field from the serializer
@@ -120,6 +122,13 @@ class MenuItemSerializer(serializers.ModelSerializer):
         ingredients = obj.menuingredient_set.all()
         serializer = MenuIngredientSerializer(ingredients, many=True)
         return serializer.data
+    
+    def get_cost(self, obj):
+        cost = 0
+        ingredients = obj.menuingredient_set.all()
+        for ingredient in ingredients:
+            cost += float(ingredient.ingredient.cost) * ingredient.quantity
+        return "{0:.2f}".format(cost)
 
 class MenuIngredientSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField(read_only=True)

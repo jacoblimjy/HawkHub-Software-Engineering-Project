@@ -33,6 +33,13 @@ import {
   inventoryUpdateReducer,
   inventoryDeleteReducer,
 } from "./reducers/inventoryReducer";
+import {
+  menuItemListReducer,
+  menuItemDeleteReducer,
+  menuItemUpdateReducer,
+  menuItemCreateReducer,
+  menuIngredientUpdateReducer,
+} from "./reducers/menuReducers";
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -63,6 +70,12 @@ const reducer = combineReducers({
   inventoryCreate: inventoryCreateReducer,
   inventoryUpdate: inventoryUpdateReducer,
   inventoryDelete: inventoryDeleteReducer,
+
+  menuItemList: menuItemListReducer,
+  menuItemDelete: menuItemDeleteReducer,
+  menuItemUpdate: menuItemUpdateReducer,
+  menuItemCreate: menuItemCreateReducer,
+  menuIngredientUpdate: menuIngredientUpdateReducer,
 });
 
 const cartItemsFromStorage = localStorage.getItem("cartItems")

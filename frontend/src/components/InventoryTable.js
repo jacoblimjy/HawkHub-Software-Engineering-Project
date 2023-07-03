@@ -244,7 +244,7 @@ export default function InventoryTable() {
         { value: "Meat", label: "Meat" },
         { value: "Seafood", label: "Seafood" },
         { value: "Dairy", label: "Dairy" },
-        { value: "Baking", label: "Baking" },
+        { value: "Baking and Grains", label: "Baking and Grains" },
         { value: "Spices and Herbs", label: "Spices and Herbs" },
         { value: "Beverages", label: "Beverages" },
         { value: "Others", label: "Others" },

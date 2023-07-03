@@ -15,11 +15,11 @@ def createMenuItem(request):
     if serializer.is_valid():
         try:
             serializer.save(user=request.user)
-            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except:
-            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"Menu Item already exists"}, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
@@ -31,11 +31,13 @@ def updateMenuItem(request):
         if serializer.is_valid():
             try:
                 serializer.save()
-                return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+                return Response(serializer.data, status=status.HTTP_200_OK)
             except:
-                return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"Error updating"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except:
-        return Response({"status": "error", "data": 'Menu Item does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'Menu Item does not exist'}, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -51,9 +53,9 @@ def deleteMenuItem(request):
     try:
         menuItem = MenuItem.objects.filter(user = request.user).get(pk=data['_id'])
         menuItem.delete()
-        return Response({"status": "success", "data": 'Menu Item deleted.'}, status=status.HTTP_200_OK)
+        return Response({'Menu Item deleted'}, status=status.HTTP_200_OK)
     except:
-        return Response({"status": "error", "data": 'Menu Item does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'Menu Item does not exist'}, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -107,17 +109,17 @@ def updateMenuIngredient(request):
                 if serializer.is_valid():
                     serializer.save(menuItem=menuItem)
                 else:
-                    return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         for remove_ingredient in data['remove']:
             if ingredients.filter(ingredient=remove_ingredient['ingredient']).exists():
                 menuIngredient = ingredients.get(ingredient=remove_ingredient['ingredient'])
                 menuIngredient.delete()
 
-        return Response({"status": "success", "data": 'Menu Ingredients updated.'}, status=status.HTTP_200_OK)
+        return Response({'Menu Ingredients updated'}, status=status.HTTP_200_OK)
     
     except Exception as err:
-        return Response({"status": "error", "data": str(err)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({str(err)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
