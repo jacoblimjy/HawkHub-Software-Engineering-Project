@@ -22,9 +22,9 @@ def updateFinancial(request):
         serializer = FinancialSerializer(instance=financial, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except:
-        return Response({"status": "error", "data": 'Financial does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'Financial does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
     

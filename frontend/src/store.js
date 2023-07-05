@@ -39,7 +39,12 @@ import {
   menuItemUpdateReducer,
   menuItemCreateReducer,
   menuIngredientUpdateReducer,
+  menuItemSaleReducer,
 } from "./reducers/menuReducers";
+import {
+  financialListReducer,
+  financialUpdateReducer,
+} from "./reducers/financialReducers";
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -76,6 +81,10 @@ const reducer = combineReducers({
   menuItemUpdate: menuItemUpdateReducer,
   menuItemCreate: menuItemCreateReducer,
   menuIngredientUpdate: menuIngredientUpdateReducer,
+  menuItemSale: menuItemSaleReducer,
+
+  financialList: financialListReducer,
+  financialUpdate: financialUpdateReducer,
 });
 
 const cartItemsFromStorage = localStorage.getItem("cartItems")

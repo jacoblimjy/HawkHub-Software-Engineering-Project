@@ -14,6 +14,9 @@ import {
   MENUINGREDIENT_UPDATE_REQUEST,
   MENUINGREDIENT_UPDATE_SUCCESS,
   MENUINGREDIENT_UPDATE_FAIL,
+  MENUITEM_SALE_REQUEST,
+  MENUITEM_SALE_SUCCESS,
+  MENUITEM_SALE_FAIL,
 } from "../constants/menuConstants";
 
 import axios from "axios";
@@ -114,7 +117,6 @@ export const updateMenuItem = (id, price) => async (dispatch) => {
           ? error.response.data.message
           : error.message,
     });
-    throw error;
   }
 };
 
@@ -153,7 +155,6 @@ export const createMenuItem = (name, price) => async (dispatch) => {
           ? error.response.data
           : error.message,
     });
-    throw error;
   }
 };
 
@@ -195,6 +196,42 @@ export const updateMenuIngredients =
             ? error.response.data.message
             : error.message,
       });
-      throw error;
     }
   };
+
+export const saleMenuItem = (id, num_Sold) => async (dispatch) => {
+  try {
+    dispatch({
+      type: MENUITEM_SALE_REQUEST,
+    });
+
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/menu/sellMenuItem/`,
+      { _id: id, num_Sold: num_Sold },
+      config
+    );
+
+    dispatch({
+      type: MENUITEM_SALE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: MENUITEM_SALE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+    throw error;
+  }
+};

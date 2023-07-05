@@ -82,7 +82,7 @@ export default function IngredientEditer({ item }) {
       await dispatch(updateMenuIngredients(item._id, add, remove));
       await dispatch(updateMenuItem(item._id, price));
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

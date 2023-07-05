@@ -14,6 +14,9 @@ import {
   MENUINGREDIENT_UPDATE_REQUEST,
   MENUINGREDIENT_UPDATE_SUCCESS,
   MENUINGREDIENT_UPDATE_FAIL,
+  MENUITEM_SALE_REQUEST,
+  MENUITEM_SALE_SUCCESS,
+  MENUITEM_SALE_FAIL,
 } from "../constants/menuConstants";
 
 export const menuItemListReducer = (state = { menuItems: [] }, action) => {
@@ -75,6 +78,19 @@ export const menuIngredientUpdateReducer = (state = {}, action) => {
     case MENUINGREDIENT_UPDATE_SUCCESS:
       return { loading: false, success: true };
     case MENUINGREDIENT_UPDATE_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const menuItemSaleReducer = (state = {}, action) => {
+  switch (action.type) {
+    case MENUITEM_SALE_REQUEST:
+      return { loading: true };
+    case MENUITEM_SALE_SUCCESS:
+      return { loading: false, success: true };
+    case MENUITEM_SALE_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

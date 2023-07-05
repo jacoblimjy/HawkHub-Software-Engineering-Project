@@ -18,12 +18,10 @@ import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
-import InventoryAdder from "./InventoryAdder";
 import {
   listInventories,
   updateInventory,
   deleteInventory,
-  createInventory,
 } from "../actions/inventoryActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
@@ -211,7 +209,7 @@ export default function InventoryTable() {
         children: Object.values(inventoryCreate.error),
         severity: "error",
       });
-      //console.log(inventoryCreate);
+      // console.log(inventoryCreate.error);
       inventoryCreate.error = null;
     } else if (inventoryDelete.error) {
       setSnackbar({
@@ -222,7 +220,7 @@ export default function InventoryTable() {
     }
   }, [inventoryCreate.error, inventoryDelete.error]);
 
-  console.log(inventories);
+  // console.log(inventories);
 
   const columns = [
     {
