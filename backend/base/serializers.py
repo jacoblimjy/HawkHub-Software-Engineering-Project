@@ -10,10 +10,11 @@ class UserSerializer(serializers.ModelSerializer):
     _id = serializers.SerializerMethodField(read_only=True) 
     isAdmin = serializers.SerializerMethodField(read_only=True)
     isSupplier = serializers.SerializerMethodField(read_only=True)
+    supplier_id = serializers.SerializerMethodField(read_only=True)
 
     class Meta: #this is a class that is built into django rest framework which allows us to define some options for our serializer
         model = User
-        fields = ['id', '_id', 'username', 'email', 'name', 'isAdmin', 'isSupplier'] 
+        fields = ['id', '_id', 'username', 'email', 'name', 'isAdmin', 'isSupplier', 'supplier_id'] 
     
     def get__id(self, obj): #this is a method that is not in the model but we want to add it to the serializer
         return obj.id 
@@ -29,6 +30,12 @@ class UserSerializer(serializers.ModelSerializer):
     
     def get_isSupplier(self, obj):
         return obj.userprofile.isSupplier
+    
+    def get_supplier_id(self, obj):
+        if obj.supplier_set.first():
+            return obj.supplier_set.first()._id
+        else:
+            return None
     
     def create(self, validated_data): #check again
         user = User.objects.create(
@@ -50,7 +57,7 @@ class UserSerializerWithToken(UserSerializer):
     token = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = User
-        fields = ['id', '_id', 'username', 'email', 'name', 'isAdmin', 'token', 'isSupplier']
+        fields = ['id', '_id', 'username', 'email', 'name', 'isAdmin', 'token', 'isSupplier', 'supplier_id']
     
     def get_token(self, obj):
         token = RefreshToken.for_user(obj) #what this do is it will generate a token for the user that is passed in

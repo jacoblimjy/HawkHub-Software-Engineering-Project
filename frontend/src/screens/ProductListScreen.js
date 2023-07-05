@@ -39,35 +39,21 @@ function ProductListScreen({}) {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const getSupplier = useSelector((state) => state.getSupplier);
-  const { supplier } = getSupplier;
-
-  // console.log(supplier)
-
   useEffect(() => {
     if (!userInfo) {
       navigate("/login");
     } else {
-      dispatch(getSupplierByUserId(userInfo._id));
-    }
-  }, [dispatch, userInfo]);
+      dispatch({ type: PRODUCT_CREATE_RESET });
 
-  useEffect(() => {
-    dispatch({ type: PRODUCT_CREATE_RESET });
-
-    if (successCreate) {
-      navigate(`/admin/${supplier._id}/product/${createdProduct._id}/edit`); //check with App.js
-    } else {
-      dispatch(listProducts(supplier._id));
+      if (successCreate) {
+        navigate(
+          `/admin/${userInfo.supplier_id}/product/${createdProduct._id}/edit`
+        ); //check with App.js
+      } else {
+        dispatch(listProducts(userInfo.supplier_id));
+      }
     }
-  }, [
-    dispatch,
-    userInfo,
-    successDelete,
-    successCreate,
-    createdProduct,
-    supplier,
-  ]);
+  }, [dispatch, userInfo, successDelete, successCreate, createdProduct]);
 
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
