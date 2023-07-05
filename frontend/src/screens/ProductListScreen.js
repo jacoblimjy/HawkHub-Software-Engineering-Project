@@ -17,7 +17,6 @@ import { getSupplierByUserId } from "../actions/supplierActions";
 function ProductListScreen({}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const productList = useSelector((state) => state.productList);
   const { loading, error, products } = productList;
@@ -46,20 +45,29 @@ function ProductListScreen({}) {
   // console.log(supplier)
 
   useEffect(() => {
-    dispatch({ type: PRODUCT_CREATE_RESET });
-
-    dispatch(getSupplierByUserId(userInfo._id));
-
     if (!userInfo) {
       navigate("/login");
+    } else {
+      dispatch(getSupplierByUserId(userInfo._id));
     }
+  }, [dispatch, userInfo]);
+
+  useEffect(() => {
+    dispatch({ type: PRODUCT_CREATE_RESET });
 
     if (successCreate) {
       navigate(`/admin/${supplier._id}/product/${createdProduct._id}/edit`); //check with App.js
     } else {
       dispatch(listProducts(supplier._id));
     }
-  }, [dispatch, userInfo, successDelete, successCreate, createdProduct]);
+  }, [
+    dispatch,
+    userInfo,
+    successDelete,
+    successCreate,
+    createdProduct,
+    supplier,
+  ]);
 
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {

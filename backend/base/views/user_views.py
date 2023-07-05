@@ -11,7 +11,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.hashers import make_password 
 
-from base.models import UserProfile
+from base.models import UserProfile, Supplier
 # this is a function that is built into django that allows us to hash a password
 from rest_framework import status
 
@@ -44,6 +44,12 @@ def registerUser(request):
             user = user,
             isSupplier = True if data['isSupplier'] == 'true' else False 
         )
+
+        if data['isSupplier'] == 'true':
+            supplier = Supplier.objects.create(
+                user = user,
+            )
+            supplier.save()
 
         serializer = UserSerializerWithToken(user, many=False)
         return Response(serializer.data)

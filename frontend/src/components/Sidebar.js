@@ -45,7 +45,6 @@ function Sidebar({ open, onClose }) {
       </div>
       <List sx={{ mt: "0.5rem" }}>
         <ListItem
-          Button
           component={Link}
           to="/"
           onClick={handleDrawerClose}
@@ -68,7 +67,6 @@ function Sidebar({ open, onClose }) {
           <ListItemText primary="StockTracker" className="list-item-text" />
         </ListItem>
         <ListItem
-          Button
           component={Link}
           to="/finance"
           onClick={handleDrawerClose}
@@ -80,7 +78,6 @@ function Sidebar({ open, onClose }) {
           <ListItemText primary="FinanceTracker" className="list-item-text" />
         </ListItem>
         <ListItem
-          Button
           component={Link}
           to="/suppliers/"
           onClick={handleDrawerClose}
@@ -92,7 +89,6 @@ function Sidebar({ open, onClose }) {
           <ListItemText primary="Suppliers" className="list-item-text" />
         </ListItem>
         <ListItem
-          Button
           component={Link}
           to="/"
           onClick={handleDrawerClose}
@@ -106,7 +102,6 @@ function Sidebar({ open, onClose }) {
       </List>
       <List sx={{ mt: "1rem" }}>
         <ListItem
-          Button
           component={Link}
           to="/admin/productlist"
           onClick={handleDrawerClose}
@@ -115,7 +110,6 @@ function Sidebar({ open, onClose }) {
           <ListItemText primary="ProductList" className="list-item-text" />
         </ListItem>
         <ListItem
-          Button
           component={Link}
           to="/"
           onClick={handleDrawerClose}
@@ -124,7 +118,6 @@ function Sidebar({ open, onClose }) {
           <ListItemText primary="Notification" className="list-item-text" />
         </ListItem>
         <ListItem
-          Button
           component={Link}
           to="/"
           onClick={handleDrawerClose}
