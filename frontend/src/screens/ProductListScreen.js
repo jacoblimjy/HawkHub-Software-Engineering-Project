@@ -17,7 +17,6 @@ import { getSupplierByUserId } from "../actions/supplierActions";
 function ProductListScreen({}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const productList = useSelector((state) => state.productList);
   const { loading, error, products } = productList;
@@ -40,24 +39,19 @@ function ProductListScreen({}) {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const getSupplier = useSelector((state) => state.getSupplier);
-  const { supplier } = getSupplier;
-
-  // console.log(supplier)
-
   useEffect(() => {
-    dispatch({ type: PRODUCT_CREATE_RESET });
-
-    dispatch(getSupplierByUserId(userInfo._id));
-
     if (!userInfo) {
       navigate("/login");
-    }
-
-    if (successCreate) {
-      navigate(`/admin/${supplier._id}/product/${createdProduct._id}/edit`); //check with App.js
     } else {
-      dispatch(listProducts(supplier._id));
+      dispatch({ type: PRODUCT_CREATE_RESET });
+
+      if (successCreate) {
+        navigate(
+          `/admin/${userInfo.supplier_id}/product/${createdProduct._id}/edit`
+        ); //check with App.js
+      } else {
+        dispatch(listProducts(userInfo.supplier_id));
+      }
     }
   }, [dispatch, userInfo, successDelete, successCreate, createdProduct]);
 

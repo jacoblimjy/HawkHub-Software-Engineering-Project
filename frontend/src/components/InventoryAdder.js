@@ -7,9 +7,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import MenuItem from "@mui/material/MenuItem";
-import axios from "axios";
+import AddIcon from "@mui/icons-material/Add";
+import { useDispatch } from "react-redux";
+import { createInventory } from "../actions/inventoryActions";
 
-export default function InventoryAdder({ change, setChange }) {
+export default function InventoryAdder() {
+  const dispatch = useDispatch();
+
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [category, setCategory] = React.useState("");
@@ -30,16 +34,6 @@ export default function InventoryAdder({ change, setChange }) {
     event.preventDefault();
     setOpen(false);
     try {
-      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
-      const config = {
-        headers: {
-          //headers is an object that contains the headers of the request
-          "Content-type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-
       const data = {
         name: name,
         category: category,
@@ -49,20 +43,22 @@ export default function InventoryAdder({ change, setChange }) {
         expirationDate: expirationDate,
       };
 
-      await axios.post(`/api/ingredients/createIngredient/`, data, config);
+      await dispatch(createInventory(data));
     } catch (error) {
       console.log(error);
     }
-    setChange(!change);
   };
 
   return (
     <div>
       <Button
         variant="outlined"
+        color="warning"
         onClick={handleClickOpen}
-        sx={{ marginBottom: 1 }}
+        sx={{ marginBottom: 1, padding: 1 }}
+        fullWidth
       >
+        <AddIcon sx={{ marginRight: 1 }} />
         Add Ingredient
       </Button>
       <Dialog open={open} onClose={handleClose}>
@@ -98,14 +94,15 @@ export default function InventoryAdder({ change, setChange }) {
                 select
               >
                 <MenuItem value={"Vegetables"}>Vegetables</MenuItem>
+                <MenuItem value={"Fruits"}>Fruits</MenuItem>
                 <MenuItem value={"Meat"}>Meat</MenuItem>
                 <MenuItem value={"Seafood"}>Seafood</MenuItem>
-                <MenuItem value={"Dairy Product"}>Dairy Product</MenuItem>
-                <MenuItem value={"Spices and Herbs"}>Spices and Herbs</MenuItem>
-                <MenuItem value={"Condiments"}>Condiments</MenuItem>
+                <MenuItem value={"Dairy"}>Dairy Product</MenuItem>
                 <MenuItem value={"Baking and Grains"}>
                   Baking and Grains
                 </MenuItem>
+                <MenuItem value={"Spices and Herbs"}>Spices and Herbs</MenuItem>
+                <MenuItem value={"Beverages"}>Beverages</MenuItem>
                 <MenuItem value={"Others"}>Others</MenuItem>
               </TextField>
             </div>

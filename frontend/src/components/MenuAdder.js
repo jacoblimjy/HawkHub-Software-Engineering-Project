@@ -6,15 +6,16 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-import axios from "axios";
+import AddIcon from "@mui/icons-material/Add";
+import { useDispatch } from "react-redux";
+import { createMenuItem } from "../actions/menuActions";
 
-export default function MenuAdder({ change, setChange }) {
+export default function MenuAdder() {
+  const dispatch = useDispatch();
+
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [price, setPrice] = React.useState("");
-  const [snackbar, setSnackbar] = React.useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -24,49 +25,26 @@ export default function MenuAdder({ change, setChange }) {
     setOpen(false);
   };
 
-  const handleCloseSnackbar = () => setSnackbar(null);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     setOpen(false);
     try {
-      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
-      const config = {
-        headers: {
-          //headers is an object that contains the headers of the request
-          "Content-type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-
-      const data = {
-        name: name,
-        price: price,
-      };
-
-      await axios.post(`/api/menu/createMenuItem/`, data, config);
-      //   setSnackbar({
-      //     children: "Menu Item successfully added",
-      //     severity: "success",
-      //   });
+      await dispatch(createMenuItem(name, price));
     } catch (error) {
-      //   setSnackbar({
-      //     children: "This Menu Item already exists",
-      //     severity: "error",
-      //   });
       console.log(error);
     }
-    setChange(!change);
   };
 
   return (
     <div>
       <Button
         variant="outlined"
+        color="warning"
         onClick={handleClickOpen}
-        sx={{ marginBottom: 1 }}
+        sx={{ marginBottom: 1, padding: 1 }}
+        fullWidth
       >
+        <AddIcon sx={{ marginRight: 1 }} />
         Add Menu Item
       </Button>
       <Dialog open={open} onClose={handleClose}>
@@ -110,11 +88,6 @@ export default function MenuAdder({ change, setChange }) {
           </DialogActions>
         </form>
       </Dialog>
-      {!!snackbar && (
-        <Snackbar open onClose={handleCloseSnackbar} autoHideDuration={6000}>
-          <Alert {...snackbar} onClose={handleCloseSnackbar} />
-        </Snackbar>
-      )}
     </div>
   );
 }

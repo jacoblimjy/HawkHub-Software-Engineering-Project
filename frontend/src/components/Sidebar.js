@@ -13,10 +13,16 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import TimelineIcon from "@mui/icons-material/Timeline";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import "../index.css";
 import hawkhubLogo from "../assets/hawkhublogo.png";
+import { useSelector } from "react-redux";
 
 function Sidebar({ open, onClose }) {
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+  const isSupplier = userInfo?.isSupplier;
+
   const handleDrawerClose = () => {
     onClose();
   };
@@ -45,7 +51,6 @@ function Sidebar({ open, onClose }) {
       </div>
       <List sx={{ mt: "0.5rem" }}>
         <ListItem
-          Button
           component={Link}
           to="/"
           onClick={handleDrawerClose}
@@ -56,31 +61,48 @@ function Sidebar({ open, onClose }) {
           </ListItemIcon>
           <ListItemText primary="Home" className="list-item-text" />
         </ListItem>
+        {!isSupplier ? (
+          <>
+            <ListItem
+              component={Link}
+              to="/stocktaking"
+              onClick={handleDrawerClose}
+              className="list-item"
+            >
+              <ListItemIcon sx={{ minWidth: 32 }}>
+                <InventoryIcon sx={{ marginBottom: "4px" }} />
+              </ListItemIcon>
+              <ListItemText primary="StockTracker" className="list-item-text" />
+            </ListItem>
+            <ListItem
+              component={Link}
+              to="/finance"
+              onClick={handleDrawerClose}
+              className="list-item"
+            >
+              <ListItemIcon sx={{ minWidth: 32 }}>
+                <TimelineIcon sx={{ marginBottom: "4px" }} />
+              </ListItemIcon>
+              <ListItemText
+                primary="FinanceTracker"
+                className="list-item-text"
+              />
+            </ListItem>
+          </>
+        ) : (
+          <ListItem
+            component={Link}
+            to="/admin/productlist"
+            onClick={handleDrawerClose}
+            className="list-item"
+          >
+            <ListItemIcon sx={{ minWidth: 32 }}>
+              <LocalOfferIcon sx={{ marginBottom: "4px" }} />
+            </ListItemIcon>
+            <ListItemText primary="ProductList" className="list-item-text" />
+          </ListItem>
+        )}
         <ListItem
-          component={Link}
-          to="/stocktaking"
-          onClick={handleDrawerClose}
-          className="list-item"
-        >
-          <ListItemIcon sx={{ minWidth: 32 }}>
-            <InventoryIcon sx={{ marginBottom: "4px" }} />
-          </ListItemIcon>
-          <ListItemText primary="StockTracker" className="list-item-text" />
-        </ListItem>
-        <ListItem
-          Button
-          component={Link}
-          to="/finance"
-          onClick={handleDrawerClose}
-          className="list-item"
-        >
-          <ListItemIcon sx={{ minWidth: 32 }}>
-            <TimelineIcon sx={{ marginBottom: "4px" }} />
-          </ListItemIcon>
-          <ListItemText primary="FinanceTracker" className="list-item-text" />
-        </ListItem>
-        <ListItem
-          Button
           component={Link}
           to="/suppliers/"
           onClick={handleDrawerClose}
@@ -92,7 +114,6 @@ function Sidebar({ open, onClose }) {
           <ListItemText primary="Suppliers" className="list-item-text" />
         </ListItem>
         <ListItem
-          Button
           component={Link}
           to="/"
           onClick={handleDrawerClose}
@@ -106,16 +127,6 @@ function Sidebar({ open, onClose }) {
       </List>
       <List sx={{ mt: "1rem" }}>
         <ListItem
-          Button
-          component={Link}
-          to="/admin/productlist"
-          onClick={handleDrawerClose}
-          className="list-item"
-        >
-          <ListItemText primary="ProductList" className="list-item-text" />
-        </ListItem>
-        <ListItem
-          Button
           component={Link}
           to="/"
           onClick={handleDrawerClose}
@@ -124,7 +135,6 @@ function Sidebar({ open, onClose }) {
           <ListItemText primary="Notification" className="list-item-text" />
         </ListItem>
         <ListItem
-          Button
           component={Link}
           to="/"
           onClick={handleDrawerClose}

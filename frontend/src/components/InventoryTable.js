@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  DataGrid,
+  GridActionsCellItem,
+  gridPageCountSelector,
+  gridPageSelector,
+  useGridApiContext,
+  useGridSelector,
+} from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -9,22 +16,35 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
-import InventoryAdder from "./InventoryAdder";
+import Pagination from "@mui/material/Pagination";
+import PaginationItem from "@mui/material/PaginationItem";
+import {
+  listInventories,
+  updateInventory,
+  deleteInventory,
+} from "../actions/inventoryActions";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 
 function dateSetter(params) {
   const date = params.value.toISOString().split("T")[0];
   return { ...params.row, expirationDate: date };
 }
 
+function costSetter(params) {
+  const number = Number(params.value);
+  return { ...params.row, cost: number.toFixed(2) };
+}
+
 const useFakeMutation = () => {
   return React.useCallback(
-    (user) =>
+    (row) =>
       new Promise((resolve, reject) => {
         setTimeout(() => {
-          if (user.name?.trim() === "") {
+          if (row.name.trim() === "") {
             reject();
           } else {
-            resolve(user);
+            resolve(row);
           }
         }, 200);
       }),
@@ -37,7 +57,9 @@ function computeMutation(newRow, oldRow) {
     return `Name from '${oldRow.name}' to '${newRow.name}'`;
   }
   if (newRow.category !== oldRow.category) {
-    return `Age from '${oldRow.category || ""}' to '${newRow.category || ""}'`;
+    return `Category from '${oldRow.category || ""}' to '${
+      newRow.category || ""
+    }'`;
   }
   if (newRow.cost !== oldRow.cost) {
     return `Cost from '${oldRow.cost || ""}' to '${newRow.cost || ""}'`;
@@ -59,8 +81,12 @@ function computeMutation(newRow, oldRow) {
 }
 
 export default function InventoryTable() {
-  const [change, setChange] = useState(false);
-  const [tableData, setTableData] = useState([]);
+  const dispatch = useDispatch();
+  const inventoryList = useSelector((state) => state.inventoryList);
+  const { loading, error, inventories } = inventoryList;
+  const inventoryCreate = useSelector((state) => state.inventoryCreate);
+  const inventoryDelete = useSelector((state) => state.inventoryDelete);
+
   const mutateRow = useFakeMutation();
   const noButtonRef = React.useRef(null);
   const [promiseArguments, setPromiseArguments] = React.useState(null);
@@ -69,24 +95,13 @@ export default function InventoryTable() {
 
   const handleCloseSnackbar = () => setSnackbar(null);
 
-  const handleDelete = (id) => {
+  const handleDelete = React.useCallback((id) => {
     try {
-      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
-      const config = {
-        headers: {
-          //headers is an object that contains the headers of the request
-          "Content-type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-
-      axios.post(`/api/ingredients/deleteIngredient/`, { _id: id }, config);
-      setChange(!change);
+      dispatch(deleteInventory(id));
     } catch (error) {
       console.log(error);
     }
-  };
+  });
 
   const processRowUpdate = React.useCallback(
     (newRow, oldRow) =>
@@ -113,19 +128,10 @@ export default function InventoryTable() {
 
     try {
       // Make the HTTP request to save in the backend
-      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
-      const config = {
-        headers: {
-          //headers is an object that contains the headers of the request
-          "Content-type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-
-      await axios.put(`/api/ingredients/updateIngredient/`, newRow, config);
-
       const response = await mutateRow(newRow);
+
+      await dispatch(updateInventory(newRow));
+
       setSnackbar({
         children: "Changes successfully saved",
         severity: "success",
@@ -133,8 +139,11 @@ export default function InventoryTable() {
       resolve(response);
       setPromiseArguments(null);
     } catch (error) {
+      console.log(error);
       setSnackbar({
-        children: Object.values(error.response.data.data)[0],
+        children: Object.values(
+          error ? error.response.data : "Cannot be blank"
+        ),
         severity: "error",
       });
       reject(oldRow);
@@ -178,41 +187,76 @@ export default function InventoryTable() {
   };
 
   useEffect(() => {
-    const getInventory = async () => {
-      try {
-        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    dispatch(listInventories());
+    if (inventoryCreate.success) {
+      setSnackbar({
+        children: "Inventory successfully created",
+        severity: "success",
+      });
+      inventoryCreate.success = null;
+    } else if (inventoryDelete.success) {
+      setSnackbar({
+        children: "Inventory successfully deleted",
+        severity: "success",
+      });
+      inventoryDelete.success = null;
+    }
+  }, [inventoryDelete.success, inventoryCreate.success]);
 
-        const config = {
-          headers: {
-            //headers is an object that contains the headers of the request
-            "Content-type": "application/json",
-            Authorization: `Bearer ${userInfo.token}`,
-          },
-        };
+  useEffect(() => {
+    if (inventoryCreate.error) {
+      setSnackbar({
+        children: Object.values(inventoryCreate.error),
+        severity: "error",
+      });
+      // console.log(inventoryCreate.error);
+      inventoryCreate.error = null;
+    } else if (inventoryDelete.error) {
+      setSnackbar({
+        children: Object.values(inventoryDelete.error),
+        severity: "error",
+      });
+      inventoryDelete.error = null;
+    }
+  }, [inventoryCreate.error, inventoryDelete.error]);
 
-        axios
-          .get(`/api/ingredients/getIngredients/`, config)
-          .then((response) => {
-            setTableData(response.data);
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getInventory();
-  }, [change]);
-
-  console.log(tableData);
+  // console.log(inventories);
 
   const columns = [
-    { field: "name", headerName: "Ingredient", flex: 1, editable: true },
-    { field: "category", headerName: "Category", flex: 1, editable: true },
+    {
+      field: "name",
+      headerName: "Ingredient",
+      flex: 1,
+      editable: true,
+      minWidth: 100,
+    },
+    {
+      field: "category",
+      headerName: "Category",
+      type: "singleSelect",
+      flex: 1,
+      editable: true,
+      valueOptions: [
+        { value: "Vegetables", label: "Vegetables" },
+        { value: "Fruits", label: "Fruits" },
+        { value: "Meat", label: "Meat" },
+        { value: "Seafood", label: "Seafood" },
+        { value: "Dairy", label: "Dairy" },
+        { value: "Baking and Grains", label: "Baking and Grains" },
+        { value: "Spices and Herbs", label: "Spices and Herbs" },
+        { value: "Beverages", label: "Beverages" },
+        { value: "Others", label: "Others" },
+      ],
+      minWidth: 100,
+    },
     {
       field: "cost",
       headerName: "Cost Per Unit",
       type: "number",
       flex: 1,
       editable: true,
+      minWidth: 50,
+      valueSetter: costSetter,
     },
     {
       field: "countInStock",
@@ -220,6 +264,8 @@ export default function InventoryTable() {
       type: "number",
       flex: 1,
       editable: true,
+      minWidth: 50,
+      valueGetter: ({ value }) => (value ? value.toFixed(2) : "0.00"),
     },
     {
       field: "unit",
@@ -234,6 +280,7 @@ export default function InventoryTable() {
       ],
       flex: 1,
       editable: true,
+      minWidth: 50,
     },
     {
       field: "expirationDate",
@@ -243,6 +290,7 @@ export default function InventoryTable() {
       valueSetter: dateSetter,
       flex: 1,
       editable: true,
+      minWidth: 100,
     },
     {
       field: "actions",
@@ -258,24 +306,71 @@ export default function InventoryTable() {
     },
   ];
 
-  return (
-    <div style={{ width: "100%" }}>
-      {renderConfirmDialog()}
-      <InventoryAdder change={change} setChange={setChange} />
-      <DataGrid
-        autoHeight
-        rows={tableData}
-        columns={columns}
-        pageSize={12}
-        getRowId={(row) => row._id}
-        processRowUpdate={processRowUpdate}
-        onProcessRowUpdateError={(error) => {}}
+  function CustomPagination() {
+    const apiRef = useGridApiContext();
+    const page = useGridSelector(apiRef, gridPageSelector);
+    const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+
+    return (
+      <Pagination
+        color="warning"
+        variant="outlined"
+        shape="rounded"
+        page={page + 1}
+        count={pageCount}
+        // @ts-expect-error
+        renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
+        onChange={(event, value) => apiRef.current.setPage(value - 1)}
       />
-      {!!snackbar && (
-        <Snackbar open onClose={handleCloseSnackbar} autoHideDuration={6000}>
-          <Alert {...snackbar} onClose={handleCloseSnackbar} />
-        </Snackbar>
+    );
+  }
+
+  const [paginationModel, setPaginationModel] = React.useState({
+    pageSize: 8,
+    page: 0,
+  });
+
+  return (
+    <>
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
+      ) : (
+        <div style={{ width: "100%" }}>
+          {renderConfirmDialog()}
+          <DataGrid
+            autoHeight
+            rows={inventories}
+            columns={columns}
+            getRowId={(row) => row._id}
+            processRowUpdate={processRowUpdate}
+            onProcessRowUpdateError={(error) => {}}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            pageSizeOptions={[8]}
+            slots={{
+              pagination: CustomPagination,
+            }}
+            sx={{
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "#FEC98F",
+
+                fontSize: 16,
+              },
+            }}
+          />
+          {!!snackbar && (
+            <Snackbar
+              open
+              onClose={handleCloseSnackbar}
+              autoHideDuration={6000}
+            >
+              <Alert {...snackbar} onClose={handleCloseSnackbar} />
+            </Snackbar>
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 }

@@ -6,6 +6,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import FormContainer from "../components/FormContainer";
 import { login } from "../actions/userActions";
+import { getSupplierByUserId } from "../actions/supplierActions";
 
 function LoginScreen({ history }) {
   //an example of location is ?redirect=/shipping, this is a query string, it is used to redirect the user to the shipping page after they login
@@ -16,7 +17,7 @@ function LoginScreen({ history }) {
   const dispatch = useDispatch();
   const location = useLocation(); //useLocation is a hook that returns the location object that represents the current URL, it is similar to history, but it has more information, such as the query string
   const navigate = useNavigate(); //useNavigate is a hook that returns a navigate function, which is used to navigate to a new location, it is similar to history.push, but it has more functionality, such as the ability to navigate to a new location without adding a new entry into the history stack, which is useful for redirects
-  const redirect = location.search ? location.search.split("=")[1] : "/"; 
+  const redirect = location.search ? location.search.split("=")[1] : "/";
 
   const userLogin = useSelector((state) => state.userLogin); //get the userLogin from the state, state is the global state of the app, which is stored in the redux store, a state is a snapshot of the app at a given time
   const { error, loading, userInfo } = userLogin; //destructure the userLogin object into loading, error, and userInfo
@@ -25,6 +26,7 @@ function LoginScreen({ history }) {
     if (userInfo) {
       //history.push(redirect)
       navigate(redirect);
+      dispatch(getSupplierByUserId(userInfo._id));
     }
   }, [navigate, userInfo, redirect]); //what useEffect does here is that it first checks if userInfo exists, if it does, then it redirects the user to the redirect page, if it doesn't, then it does nothing, insert [history, userInfo, redirect] as the second argument to useEffect so that it only runs when one of these variables changes
 

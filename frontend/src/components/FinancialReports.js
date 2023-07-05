@@ -5,8 +5,9 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import TableContainer from "@mui/material/TableContainer";
 import Typography from "@mui/material/Typography";
-import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -15,9 +16,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import axios from "axios";
+import { useDispatch } from "react-redux";
+import { updateFinancial } from "../actions/financialActions";
 
-export default function FinancialReports({ data, change, setChange }) {
+export default function FinancialReports({ data }) {
+  const dispatch = useDispatch();
   const theme = useTheme();
   const [adminCost, setAdminCost] = React.useState("");
 
@@ -32,34 +35,24 @@ export default function FinancialReports({ data, change, setChange }) {
     setOpen(false);
   };
 
-  const handleSubmit = async (event, id) => {
+  const handleSubmit = async (event, data) => {
     event.preventDefault();
     setOpen(false);
     try {
-      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
-      const config = {
-        headers: {
-          //headers is an object that contains the headers of the request
-          "Content-type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-
-      const data = {
-        _id: id,
-        adminCost: adminCost,
-      };
-
-      await axios.put(`/api/financial/updateFinancial/`, data, config);
-      setChange(!change);
+      if (data.length) {
+        const id = data[data.length - 1]._id;
+        dispatch(updateFinancial(id, adminCost));
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <React.Fragment>
+    <TableContainer
+      component={Paper}
+      sx={{ p: 2, display: "flex", flexDirection: "column" }}
+    >
       <Typography
         component="h2"
         variant="h6"
@@ -68,6 +61,7 @@ export default function FinancialReports({ data, change, setChange }) {
       >
         Monthly Report
       </Typography>
+
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -80,7 +74,10 @@ export default function FinancialReports({ data, change, setChange }) {
         </TableHead>
         <TableBody>
           {data.map((row) => (
-            <TableRow key={row._id}>
+            <TableRow
+              key={row._id}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
               <TableCell>{row.date}</TableCell>
               <TableCell>{row.revenue}</TableCell>
               <TableCell>{row.cost}</TableCell>
@@ -99,9 +96,7 @@ export default function FinancialReports({ data, change, setChange }) {
         Add Extra Cost
       </Link>
       <Dialog open={open} onClose={handleClose}>
-        <form
-          onSubmit={(event) => handleSubmit(event, data[data.length - 1]._id)}
-        >
+        <form onSubmit={(event) => handleSubmit(event, data)}>
           <DialogTitle>
             Update Admin Fee for{" "}
             {data[data.length - 1] ? data[data.length - 1].date : ""}
@@ -129,6 +124,6 @@ export default function FinancialReports({ data, change, setChange }) {
           </DialogActions>
         </form>
       </Dialog>
-    </React.Fragment>
+    </TableContainer>
   );
 }

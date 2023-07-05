@@ -6,36 +6,26 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-import axios from "axios";
 import IngredientTransferList from "./IngredientTransferList";
+import { useDispatch, useSelector } from "react-redux";
+import { updateMenuItem, updateMenuIngredients } from "../actions/menuActions";
 
-export default function IngredientEditer({ item, change, setChange }) {
+export default function IngredientEditer({ item }) {
+  const dispatch = useDispatch();
+  const inventoryList = useSelector((state) => state.inventoryList);
+  const { inventories } = inventoryList;
+
   const [open, setOpen] = React.useState(false);
   const [price, setPrice] = React.useState(item.price);
-  const [snackbar, setSnackbar] = React.useState(null);
   const [add, setAdd] = React.useState([]);
   const [remove, setRemove] = React.useState([]);
 
   React.useEffect(() => {
-    const fetchIngredients = async () => {
+    const processIngredients = async () => {
       try {
         const initAdd = [];
         const initRemove = [];
         const originalIngredients = [];
-        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-        const config = {
-          headers: {
-            //headers is an object that contains the headers of the request
-            "Content-type": "application/json",
-            Authorization: `Bearer ${userInfo.token}`,
-          },
-        };
-        const { data } = await axios.get(
-          `/api/ingredients/getIngredients/`,
-          config
-        );
 
         for (let i = 0; i < item.ingredients.length; i++) {
           const ingredient = item.ingredients[i];
@@ -44,8 +34,8 @@ export default function IngredientEditer({ item, change, setChange }) {
             quantity: ingredient.quantity,
           });
         }
-        for (let i = 0; i < data.length; i++) {
-          const ingredient = data[i];
+        for (let i = 0; i < inventories.length; i++) {
+          const ingredient = inventories[i];
           if (
             originalIngredients.find(
               (present) => present.ingredient === ingredient._id
@@ -74,8 +64,8 @@ export default function IngredientEditer({ item, change, setChange }) {
         console.log(error);
       }
     };
-    fetchIngredients();
-  }, [open]);
+    processIngredients();
+  }, [inventoryList]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -85,43 +75,25 @@ export default function IngredientEditer({ item, change, setChange }) {
     setOpen(false);
   };
 
-  const handleCloseSnackbar = () => setSnackbar(null);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     setOpen(false);
     try {
-      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
-      const config = {
-        headers: {
-          //headers is an object that contains the headers of the request
-          "Content-type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-
-      const data = {
-        menuItem_id: item._id,
-        add: add,
-        remove: remove,
-      };
-
-      await axios.post(`/api/menu/updateMenuIngredient/`, data, config);
-      await axios.put(
-        "/api/menu/updateMenuItem/",
-        { _id: item._id, price: price },
-        config
-      );
+      await dispatch(updateMenuIngredients(item._id, add, remove));
+      await dispatch(updateMenuItem(item._id, price));
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
-    setChange(!change);
   };
 
   return (
     <>
-      <Button onClick={handleClickOpen} fullWidth variant="outlined">
+      <Button
+        onClick={handleClickOpen}
+        variant="contained"
+        color="warning"
+        sx={{ width: "83%" }}
+      >
         Edit
       </Button>
       <Dialog open={open} onClose={handleClose} fullWidth={true}>
@@ -154,11 +126,6 @@ export default function IngredientEditer({ item, change, setChange }) {
           </DialogActions>
         </form>
       </Dialog>
-      {!!snackbar && (
-        <Snackbar open onClose={handleCloseSnackbar} autoHideDuration={6000}>
-          <Alert {...snackbar} onClose={handleCloseSnackbar} />
-        </Snackbar>
-      )}
     </>
   );
 }
