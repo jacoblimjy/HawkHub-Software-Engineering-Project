@@ -170,7 +170,7 @@ export default function IngredientTransferList({
 
   return (
     <Grid container spacing={2} justifyContent="center" alignItems="center">
-      <Grid item>{customList("Choices", remove)}</Grid>
+      <Grid item>{customList("Available", remove)}</Grid>
       <Grid item>
         <Grid container direction="column" alignItems="center">
           <Button
@@ -195,7 +195,7 @@ export default function IngredientTransferList({
           </Button>
         </Grid>
       </Grid>
-      <Grid item>{customList("Chosen", add)}</Grid>
+      <Grid item>{customList("Using", add)}</Grid>
     </Grid>
   );
 }

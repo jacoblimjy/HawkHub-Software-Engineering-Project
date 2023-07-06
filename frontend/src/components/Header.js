@@ -15,28 +15,12 @@ import { logout } from "../actions/userActions";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCartOutlined";
 import AccountCircleIcon from "@mui/icons-material/AccountCircleOutlined";
 import Sidebar from "./Sidebar";
+import UserMenu from "./UserMenu";
 import MenuIcon from "@mui/icons-material/Menu";
 
 function Header() {
-  const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
-
-  const dispatch = useDispatch();
-
   //user menu
   const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const logoutHandler = () => {
-    dispatch(logout());
-  };
 
   //sidebar
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -85,45 +69,7 @@ function Header() {
           >
             Cart
           </Button>
-
-          {userInfo ? (
-            <React.Fragment>
-              <Button
-                color="inherit"
-                startIcon={<AccountCircleIcon />}
-                id="user-menu"
-                onClick={handleMenuOpen}
-              >
-                {userInfo.name}
-              </Button>
-
-              <Menu
-                id="user-menu"
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-              >
-                <MenuItem
-                  component={Link}
-                  to="/profile"
-                  onClick={handleMenuClose}
-                >
-                  Profile
-                </MenuItem>
-
-                <MenuItem onClick={logoutHandler}>Logout</MenuItem>
-              </Menu>
-            </React.Fragment>
-          ) : (
-            <Button
-              component={Link}
-              to="/login"
-              color="inherit"
-              startIcon={<AccountCircleIcon />}
-            >
-              Login
-            </Button>
-          )}
+          <UserMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
         </div>
       </Toolbar>
     </AppBar>

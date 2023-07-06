@@ -12,4 +12,6 @@ urlpatterns = [
     path('updateMenuIngredient/', views.updateMenuIngredient, name='update-menu-ingredient'),
     path('getMenuIngredients/', views.getMenuIngredients, name='get-menu-ingredients'),
     path('deleteMenuIngredient/', views.deleteMenuIngredient, name='delete-menu-ingredient'),
+
+    path('sellMenuItem/', views.sellMenuItem, name='sell-menu-item'),
 ]   
