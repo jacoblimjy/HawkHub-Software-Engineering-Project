@@ -4,3 +4,5 @@
 
 #ignore .pyc files
 *.pyc
+
+db.sqlite3
