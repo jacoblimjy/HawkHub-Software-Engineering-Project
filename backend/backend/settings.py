@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne", #added
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -42,6 +43,14 @@ INSTALLED_APPS = [
     "rest_framework", #added
     "corsheaders", #added corsheader is for cross origin resource sharing
 ]
+
+ASGI_APPLICATION = 'backend.asgi.application' #added
+
+CHANNEL_LAYERS = { #added
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -130,7 +139,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "backend.wsgi.application"
+# WSGI_APPLICATION = "backend.wsgi.application"
 
 
 # Database
