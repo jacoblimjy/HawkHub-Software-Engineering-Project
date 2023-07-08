@@ -19,6 +19,8 @@ function ProductEditScreen({}) {
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
+  const [expirationDate, setExpirationDate] = useState("");
+
   const [uploading, setUploading] = useState(false);
 
   const dispatch = useDispatch();
@@ -45,10 +47,10 @@ function ProductEditScreen({}) {
         setName(product.name);
         setPrice(product.price);
         setImage(product.image);
-        // setBrand(product.brand)
         setCategory(product.category);
         setCountInStock(product.countInStock);
         setDescription(product.description);
+        setExpirationDate(product.expirationDate);
       }
     }
   }, [dispatch, product, productId, successUpdate]);
@@ -61,10 +63,10 @@ function ProductEditScreen({}) {
         name,
         price,
         image,
-        // brand,
         category,
         countInStock,
         description,
+        expirationDate,
       })
     );
   };
@@ -179,6 +181,16 @@ function ProductEditScreen({}) {
                 placeholder="Enter description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId="description">
+              <Form.Label>Expiration Date</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter expiration date"
+                value={expirationDate}
+                onChange={(e) => setExpirationDate(e.target.value)}
               ></Form.Control>
             </Form.Group>
 

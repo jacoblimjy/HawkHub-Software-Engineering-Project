@@ -3,6 +3,7 @@ import { Container } from "@mui/system";
 import React from "react";
 import hawkhubplus from "../assets/hawkhubplus.png";
 import star from "../assets/Star.png";
+import hawker from "../assets/hawker.webp";
 
 function HomeScreen() {
   const CustomButton = ({
@@ -46,7 +47,7 @@ function HomeScreen() {
   const CustomBox = styled(Box)(({ theme }) => ({
     display: "flex",
     justifyContent: "center",
-    gap: theme.spacing(5),
+    gap: theme.spacing(1),
     marginTop: theme.spacing(3),
     [theme.breakpoints.down("md")]: {
       flexDirection: "column",
@@ -89,7 +90,7 @@ function HomeScreen() {
                 variant="body2"
                 sx={{ fontSize: "18px", color: "#5A6473", my: 4 }}
               >
-                Making life easier for hawkers and suppliers. Our web
+                Making life easier for Hawkers and Suppliers. Our web
                 application provides a one-stop solution for hawkers to manage
                 their inventory and finances, as well as make business purchases
                 with ease.
@@ -150,6 +151,83 @@ function HomeScreen() {
           </Typography>
         </Box>
       </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          mt: 5,
+        }}
+      >
+        <Typography
+          variant="h3"
+          sx={{ fontSize: "20px", fontWeight: "bold" }}
+        >
+          Our Story
+        </Typography>
+
+        <img src={hawker} alt="hawkhubplus" style={{ maxWidth: "50%" }} />
+        <CustomBox>
+          <Typography
+            variant="body2"
+            sx={{
+              fontSize: "20px",
+              fontWeight: "100",
+              color: "#5A6473",
+            }}
+          >
+            <p>  Managing finances and inventory can be a cumbersome task for Hawkers, who frequently rely on manual processes to keep track of their business operations. We acknowledge the vital role that Hawkers play in our communities. Oftentimes, they are small business owners who contribute to the local economy, and they provide delicious and affordable food options. By supporting hawkers with our web application, we hope to help them succeed in their businesses and encourage a new generation of Hawkers. </p>
+            <p>  By making it easier for Hawkers to manage their businesses and locate supplies, they can concentrate on perfecting their culinary skills. This can indirectly benefit customers who enjoy affordable, high-quality food options. In addition, our web application will help suppliers expand their customer base and grow their businesses. Ultimately, supporting hawkers is about contributing to the local economy and creating vibrant and diverse communities. By developing a platform that supports the entire food culture ecosystem, we hope to contribute to the preservation of local food and the development of stronger communities. </p>
+          </Typography>
+        </CustomBox>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          mt: 2,
+        }}
+      >
+        <Typography
+          variant="h3"
+          sx={{ fontSize: "20px", fontWeight: "bold" }}
+        >
+          Main Features
+        </Typography>
+        <Typography
+            variant="body2"
+            sx={{
+              fontSize: "18px",
+              fontWeight: "100",
+              color: "#5A6473",
+              textAlign: "center",
+            }}
+          >
+            New here? <br/>
+            Our platform features 3 Main Features: Namely StockTracker, FinanceTracker & Multi-Vendor(Suppliers) Ecommerce Space. <br/>            
+          </Typography>
+          {/* <Typography
+            variant="body2"
+            sx={{
+              fontSize: "18px",
+              fontWeight: "100",
+              color: "#5A6473",
+              mt: 2,
+            }}
+          >
+            Our Real-Time Stock Tracker's calibration feature enables hawkers to accurately measure and track the ingredients used to produce each menu item. This feature ensures that hawkers have accurate measurements and quantities of the ingredients and materials necessary to prepare their dishes. Calibration can be accomplished either with explicit numbers provided by the vendors or by analysing usage patterns over time. <br/>  <br/>           
+            Our Finance Tracker component generates financial reports for sellers. This feature enables vendors to analyse their financial performance, monitor their profitability, and trace their expenses. The financial reports provide an exhaustive summary of key financial metrics, such as revenue, expenses, profits, and other pertinent financial indicators. <br/> <br/> 
+            Our ‘Suppliers’ Ecommerce space is a multi-vendor ecommerce space where food suppliers can list their products upon registering as a supplier in our registration page.
+          </Typography> */}
+
+
+      </Box>
+
     </>
   );
 }
