@@ -4,18 +4,22 @@ from base.models import Ingredient
 from base.serializers import IngredientSerializer, UserSerializer
 from django.contrib.auth import get_user_model
 from asgiref.sync import async_to_sync
+from base.models import Notification
+from base.serializers import NotificationSerializer
 
 class NotificationConsumer(WebsocketConsumer):
     def connect(self):
         self.room_group_name = 'notifications_' + str(self.scope["user_id"])
-        print(self.channel_name)
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name
         )
+        user = get_user_model().objects.get(id=self.scope["user_id"])
+        notifications = user.notification_set.all()
+        serializer = NotificationSerializer(notifications, many=True)
         self.accept()
         self.send(text_data=json.dumps({
-            'message': 'Hello World!'
+            'message': serializer.data
         }))
     
     def disconnect(self, close_code):
@@ -37,8 +41,9 @@ class NotificationConsumer(WebsocketConsumer):
 
     def send_notification(self, event):
         message = event['message']
+        serializer = NotificationSerializer(message)
         self.send(text_data=json.dumps({
             'type': "notification",
-            'message': message
+            'message': serializer.data
         }))
     

@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view, permission_classes
 # this is a class that is built into django rest framework that allows us to check if a user is authenticated or not
 from rest_framework.permissions import IsAuthenticated
 from base.serializers import MenuItemSerializer, MenuIngredientSerializer
-from base.models import Ingredient, MenuItem, Financial
+from base.models import Ingredient, MenuItem, Financial, Notification
 from rest_framework import status
 from datetime import date
 from decimal import Decimal
@@ -158,14 +158,18 @@ def sellMenuItem(request):
             ingredient.countInStock -= menuIngredient.quantity * num_Sold
             ingredient.save()
             cost += float(ingredient.cost) * menuIngredient.quantity * num_Sold
-            channel_layer = get_channel_layer()
-            async_to_sync(channel_layer.group_send)(
-                "notifications_" + str(request.user.id),
-                {
-                    "type": "send_notification",
-                    "message": "Ingredient " + ingredient.name + " has been sold."
-                }
-            )
+            if ingredient.countInStock < 0:
+                if not Notification.objects.filter(user = request.user, subject= "Low Stock", message = ingredient.name + " is running out.", date = date.today()).exists():
+                    notification = Notification.objects.create(user = request.user, subject= "Low Stock", message = ingredient.name + " is running out.", date = date.today())
+                    channel_layer = get_channel_layer()
+                    async_to_sync(channel_layer.group_send)(
+                        "notifications_" + str(request.user.id),
+                        {
+                            "type": "send_notification",
+                            "message": notification
+                        }
+                    )
+      
 
         if Financial.objects.filter(user = request.user).exists():
             financial = Financial.objects.filter(user = request.user).latest('date')
