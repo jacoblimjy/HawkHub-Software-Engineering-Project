@@ -15,11 +15,15 @@ class NotificationConsumer(WebsocketConsumer):
             self.channel_name
         )
         user = get_user_model().objects.get(id=self.scope["user_id"])
-        notifications = user.notification_set.all()
-        serializer = NotificationSerializer(notifications, many=True)
+        notifications = user.notification_set.all().order_by('-_id')
+        notifications_unread = notifications.filter(isRead=False)
+        serializer_all = NotificationSerializer(notifications, many=True)
+        serializer_unread = NotificationSerializer(notifications_unread, many=True)
         self.accept()
         self.send(text_data=json.dumps({
-            'message': serializer.data
+            'type': "notification",
+            'notification_all': serializer_all.data,
+            'notification_unread': serializer_unread.data
         }))
     
     def disconnect(self, close_code):
@@ -27,23 +31,41 @@ class NotificationConsumer(WebsocketConsumer):
     
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        
-        data = Ingredient.objects.all()
-        # serializer = IngredientSerializer(data, many=True)
-        
-        user = get_user_model().objects.get(id=self.scope["user_id"])
-        serializer = UserSerializer(user)
-
+        notification = Notification.objects.get(_id=text_data_json['id'])
+        if text_data_json['type'] == "read":
+            notification.isRead = True
+            notification.save()
+        elif text_data_json['type'] == "delete":
+            notification.delete()
+        notifications = Notification.objects.filter(user=self.scope["user_id"]).order_by('-_id')
+        notifications_unread = notifications.filter(isRead=False)
+        serializer_all = NotificationSerializer(notifications, many=True)
+        serializer_unread = NotificationSerializer(notifications_unread, many=True)
         self.send(text_data=json.dumps({
-            'data': serializer.data
+            'type': "notification",
+            'notification_all': serializer_all.data,
+            'notification_unread': serializer_unread.data
         }))
+        # data = Ingredient.objects.all()
+        # # serializer = IngredientSerializer(data, many=True)
+        
+        # user = get_user_model().objects.get(id=self.scope["user_id"])
+        # serializer = UserSerializer(user)
+
+        # self.send(text_data=json.dumps({
+        #     'data': serializer.data
+        # }))
 
     def send_notification(self, event):
         message = event['message']
-        serializer = NotificationSerializer(message)
+        user = get_user_model().objects.get(id=self.scope["user_id"])
+        notifications = user.notification_set.all().order_by('-_id')
+        notifications_unread = notifications.filter(isRead=False)
+        serializer_all = NotificationSerializer(notifications, many=True)
+        serializer_unread = NotificationSerializer(notifications_unread, many=True)
         self.send(text_data=json.dumps({
             'type': "notification",
-            'message': serializer.data
+            'notification_all': serializer_all.data,
+            'notification_unread': serializer_unread.data
         }))
     
