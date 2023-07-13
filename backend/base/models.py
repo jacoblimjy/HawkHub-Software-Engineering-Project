@@ -6,6 +6,7 @@ from django.db.models import OneToOneField
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE) 
     isSupplier = models.BooleanField(default=False)
+    noticePeriod = models.PositiveIntegerField(null=False, blank=False, default=7)
 
     def __str__(self):
         return self.user.username

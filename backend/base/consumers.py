@@ -23,7 +23,8 @@ class NotificationConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps({
             'type': "notification",
             'notification_all': serializer_all.data,
-            'notification_unread': serializer_unread.data
+            'notification_unread': serializer_unread.data,
+            'noticePeriod': user.userprofile.noticePeriod
         }))
     
     def disconnect(self, close_code):
@@ -31,20 +32,26 @@ class NotificationConsumer(WebsocketConsumer):
     
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        notification = Notification.objects.get(_id=text_data_json['id'])
+        user = get_user_model().objects.get(id=self.scope["user_id"])
         if text_data_json['type'] == "read":
+            notification = Notification.objects.get(_id=text_data_json['id'])
             notification.isRead = True
             notification.save()
         elif text_data_json['type'] == "delete":
+            notification = Notification.objects.get(_id=text_data_json['id'])
             notification.delete()
-        notifications = Notification.objects.filter(user=self.scope["user_id"]).order_by('-_id')
+        elif text_data_json['type'] == "updateNoticePeriod":
+            user.userprofile.noticePeriod = text_data_json['noticePeriod']
+            user.userprofile.save()
+        notifications = user.notification_set.all().order_by('-_id')
         notifications_unread = notifications.filter(isRead=False)
         serializer_all = NotificationSerializer(notifications, many=True)
         serializer_unread = NotificationSerializer(notifications_unread, many=True)
         self.send(text_data=json.dumps({
             'type': "notification",
             'notification_all': serializer_all.data,
-            'notification_unread': serializer_unread.data
+            'notification_unread': serializer_unread.data,
+            'noticePeriod': user.userprofile.noticePeriod
         }))
         # data = Ingredient.objects.all()
         # # serializer = IngredientSerializer(data, many=True)
@@ -66,6 +73,7 @@ class NotificationConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps({
             'type': "notification",
             'notification_all': serializer_all.data,
-            'notification_unread': serializer_unread.data
+            'notification_unread': serializer_unread.data,
+            'noticePeriod': user.userprofile.noticePeriod
         }))
     

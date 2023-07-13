@@ -12,6 +12,8 @@ import Box from "@mui/material/Box";
 import { Grid } from "@mui/material";
 import { ThemeConsumer } from "react-bootstrap/esm/ThemeProvider";
 import { orange } from "@mui/material/colors";
+import NotificationSetting from "../components/NotificationSetting";
+import Message from "../components/Message";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,6 +49,7 @@ function NotificationScreen() {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const [value, setValue] = useState(0);
+  const [ready, val, send] = useContext(WebsocketContext);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -62,24 +65,32 @@ function NotificationScreen() {
   return (
     <div>
       <h1>Notifications</h1>
-      <Box sx={{ width: "100%" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-          >
-            <Tab label="Unread" {...a11yProps(0)} />
-            <Tab label="All" {...a11yProps(1)} />
-          </Tabs>
+      {ready ? (
+        <Box sx={{ width: "100%" }}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="basic tabs example"
+            >
+              <Tab label="Unread" {...a11yProps(0)} />
+              <Tab label="All" {...a11yProps(1)} />
+              <Tab label="Settings" {...a11yProps(2)} />
+            </Tabs>
+          </Box>
+          <CustomTabPanel value={value} index={0}>
+            <NotificationUnread />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+            <NotificationAll />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={2}>
+            <NotificationSetting />
+          </CustomTabPanel>
         </Box>
-        <CustomTabPanel value={value} index={0}>
-          <NotificationUnread />
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
-          <NotificationAll />
-        </CustomTabPanel>
-      </Box>
+      ) : (
+        <Message variant="danger">Unable to connect to server</Message>
+      )}
     </div>
   );
 }
