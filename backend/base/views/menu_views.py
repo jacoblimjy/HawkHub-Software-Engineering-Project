@@ -166,7 +166,7 @@ def sellMenuItem(request):
                         "notifications_" + str(request.user.id),
                         {
                             "type": "send_notification",
-                            "message": notification
+                            "message": "You have a new notification."
                         }
                     )
       
