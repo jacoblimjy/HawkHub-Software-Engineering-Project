@@ -197,3 +197,23 @@ class MenuItemSold(models.Model):
 
     def __str__(self):
         return str(self.menuItem) + "_sold_" + str(self.date)
+    
+class ForumPost(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    title = models.CharField(max_length=200, null=True)
+    message = models.CharField(max_length=200, null=True)
+    date = models.DateField(auto_now_add=False, null=True, blank=True)
+    _id = models.AutoField(primary_key=True, editable=False)
+
+    def __str__(self):
+        return str(self.user) + "_" + str(self.title)
+    
+class ForumComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    post = models.ForeignKey(ForumPost, on_delete=models.CASCADE)
+    message = models.CharField(max_length=200, null=True)
+    date = models.DateField(auto_now_add=False, null=True, blank=True)
+    _id = models.AutoField(primary_key=True, editable=False)
+
+    def __str__(self):
+        return str(self.user) + "_" + str(self.post)

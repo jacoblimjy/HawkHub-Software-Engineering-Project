@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/ingredients/', include('base.urls.ingredient_urls')),
     path('api/menu/', include('base.urls.menu_urls')),
     path('api/financial/', include('base.urls.financial_urls')),
+    path('api/forum/', include('base.urls.forum_urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #added. This is for serving media files during development (DEBUG=True)
