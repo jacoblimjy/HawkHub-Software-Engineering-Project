@@ -6,6 +6,7 @@ from django.db.models import OneToOneField
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE) 
     isSupplier = models.BooleanField(default=False)
+    noticePeriod = models.PositiveIntegerField(null=False, blank=False, default=7)
 
     def __str__(self):
         return self.user.username
@@ -119,6 +120,7 @@ class Ingredient(models.Model):
     countInStock = models.FloatField(null=True, blank=True, default=0)
     unit = models.CharField(max_length=200, null=True, blank=True)
     expirationDate = models.DateField(auto_now_add=False, null=True, blank=True)
+    calibratedMin = models.FloatField(null=True, blank=True, default=0)
     _id = models.AutoField(primary_key=True, editable=False)
     class Meta:
         unique_together = ["user", "name"]
@@ -168,6 +170,30 @@ class Financial(models.Model):
 
     def __str__(self):
         return str(self.user) + "_" + str(self.date)
-
     
-     
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=200, null=True)
+    message = models.CharField(max_length=200, null=True)
+    isRead = models.BooleanField(default=False)
+    date = models.DateField(auto_now_add=False, null=True, blank=True)
+    _id = models.AutoField(primary_key=True, editable=False)
+
+    class Meta:
+        unique_together = ["user", "date", "subject", "message"]
+
+    def __str__(self):
+        return str(self.user) + "_" + str(self.message)
+ 
+class MenuItemSold(models.Model):
+    menuItem = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add=False, null=True, blank=True)
+    currentTotalSold = models.IntegerField(null=True, blank=True, default=0)
+    quantity = models.IntegerField(null=True, blank=True, default=0)
+    _id = models.AutoField(primary_key=True, editable=False)
+
+    class Meta:
+        unique_together = ["menuItem", "date"]
+
+    def __str__(self):
+        return str(self.menuItem) + "_sold_" + str(self.date)
