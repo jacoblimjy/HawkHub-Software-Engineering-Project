@@ -21,9 +21,21 @@ app.conf.beat_schedule = {
     #     'schedule': 10.0,
     #     'args': (7,8)
     # },
-    'create-notification': {
-        'task': 'base.tasks.create_notification',
-        'schedule': crontab(minute=0, hour="*/1"), #every hour
+    'check-expiry': {
+        'task': 'base.tasks.check_expiry',
+        'schedule': crontab(minute=0, hour=0), #every day at 12am
         'args': ()
-    }
+    },
+
+    'log-menuItemSold': {
+        'task': 'base.tasks.log_menuItemSold',
+        'schedule': crontab(minute=59, hour=11), #every day at 11:59am
+        'args': ()
+    },
+
+    'calibrate-ingredient': {
+        'task': 'base.tasks.calibrate_ingredient',
+        'schedule': crontab(minute=0, hour=0), #every day at 12am
+        'args': ()
+    },
 }

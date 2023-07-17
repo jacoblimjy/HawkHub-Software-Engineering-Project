@@ -151,6 +151,9 @@ def sellMenuItem(request):
     num_Sold = int(data['num_Sold'])
     try:
         menuItem = MenuItem.objects.filter(user = request.user).get(pk=data['_id'])
+        menuItem.totalSold += num_Sold
+        menuItem.save()
+
         menuIngredients = menuItem.menuingredient_set.all()
         cost = 0
         for menuIngredient in menuIngredients:
@@ -159,6 +162,17 @@ def sellMenuItem(request):
             ingredient.save()
             cost += float(ingredient.cost) * menuIngredient.quantity * num_Sold
             if ingredient.countInStock < 0:
+                if not Notification.objects.filter(user = request.user, subject= "Out of Stock", message = ingredient.name + " is out of stock.", date = date.today()).exists():
+                    notification = Notification.objects.create(user = request.user, subject= "Out of Stock", message = ingredient.name + " is out of stock.", date = date.today())
+                    channel_layer = get_channel_layer()
+                    async_to_sync(channel_layer.group_send)(
+                        "notifications_" + str(request.user.id),
+                        {
+                            "type": "send_notification",
+                            "message": "You have a new notification."
+                        }
+                    )
+            elif ingredient.countInStock < ingredient.calibratedMin * request.user.userprofile.noticePeriod:
                 if not Notification.objects.filter(user = request.user, subject= "Low Stock", message = ingredient.name + " is running out.", date = date.today()).exists():
                     notification = Notification.objects.create(user = request.user, subject= "Low Stock", message = ingredient.name + " is running out.", date = date.today())
                     channel_layer = get_channel_layer()

@@ -33,7 +33,7 @@ export const WebsocketProvider = ({ children }) => {
       };
       socket.onmessage = (event) => {
         setVal(JSON.parse(event.data));
-        console.log(event.data);
+        // console.log(event.data);
       };
       socket.onerror = (error) => {
         setTimeout(() => {

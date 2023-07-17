@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import { useContext } from "react";
 import { WebsocketContext } from "./WebSocketProvider";
 import ErrorIcon from "@mui/icons-material/Error";
+import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import { ButtonGroup, Button, Grid, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
@@ -29,10 +30,17 @@ export default function NotificationUnread() {
             <React.Fragment key={item._id}>
               <ListItem alignItems="center">
                 <ListItemAvatar>
-                  <ErrorIcon
-                    fontSize="large"
-                    color={item.isRead ? "disabled" : "warning"}
-                  />
+                  {item.subject.substring(0, 5) == "Expir" ? (
+                    <AccessTimeFilledIcon
+                      fontSize="large"
+                      color={item.isRead ? "disabled" : "warning"}
+                    />
+                  ) : (
+                    <ErrorIcon
+                      fontSize="large"
+                      color={item.isRead ? "disabled" : "warning"}
+                    />
+                  )}
                 </ListItemAvatar>
                 <ListItemText
                   primary={item.subject}

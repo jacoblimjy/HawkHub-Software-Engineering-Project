@@ -118,6 +118,7 @@ class Ingredient(models.Model):
     countInStock = models.FloatField(null=True, blank=True, default=0)
     unit = models.CharField(max_length=200, null=True, blank=True)
     expirationDate = models.DateField(auto_now_add=False, null=True, blank=True)
+    calibratedMin = models.FloatField(null=True, blank=True, default=0)
     _id = models.AutoField(primary_key=True, editable=False)
     class Meta:
         unique_together = ["user", "name"]
@@ -182,5 +183,15 @@ class Notification(models.Model):
     def __str__(self):
         return str(self.user) + "_" + str(self.message)
  
-    
-     
+class MenuItemSold(models.Model):
+    menuItem = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add=False, null=True, blank=True)
+    currentTotalSold = models.IntegerField(null=True, blank=True, default=0)
+    quantity = models.IntegerField(null=True, blank=True, default=0)
+    _id = models.AutoField(primary_key=True, editable=False)
+
+    class Meta:
+        unique_together = ["menuItem", "date"]
+
+    def __str__(self):
+        return str(self.menuItem) + "_sold_" + str(self.date)
