@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Drawer,
   List,
@@ -14,14 +14,28 @@ import TimelineIcon from "@mui/icons-material/Timeline";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import HailOutlinedIcon from "@mui/icons-material/HailOutlined";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import Badge from "@mui/material/Badge";
 import "../index.css";
 import hawkhubLogo from "../assets/hawkhublogo.png";
 import { useSelector } from "react-redux";
+import { WebsocketContext } from "./WebSocketProvider";
+import { styled } from "@mui/material/styles";
+
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    right: -75,
+    top: 15,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+  },
+}));
 
 function Sidebar({ open, onClose }) {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const isSupplier = userInfo?.isSupplier;
+  const [ready, val, send] = useContext(WebsocketContext);
 
   const handleDrawerClose = () => {
     onClose();
@@ -128,11 +142,24 @@ function Sidebar({ open, onClose }) {
       <List sx={{ mt: "1rem" }}>
         <ListItem
           component={Link}
-          to="/"
+          to="/notifications"
           onClick={handleDrawerClose}
           className="list-item"
         >
-          <ListItemText primary="Notification" className="list-item-text" />
+          {/* <ListItemIcon sx={{ minWidth: 32 }}>
+            <StyledBadge
+              badgeContent={val && val.notification_unread.length}
+              color="warning"
+            >
+              <NotificationsIcon sx={{ marginBottom: "4px" }} />
+            </StyledBadge>
+          </ListItemIcon> */}
+          <StyledBadge
+            badgeContent={val && val.notification_unread.length}
+            color="warning"
+          >
+            <ListItemText primary="Notification" className="list-item-text" />
+          </StyledBadge>
         </ListItem>
         <ListItem
           component={Link}

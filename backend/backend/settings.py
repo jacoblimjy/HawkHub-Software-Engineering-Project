@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne", #added
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -41,7 +42,20 @@ INSTALLED_APPS = [
     "base", #added 
     "rest_framework", #added
     "corsheaders", #added corsheader is for cross origin resource sharing
+    "django_celery_beat", #added
+
 ]
+
+ASGI_APPLICATION = 'backend.asgi.application' #added
+
+CHANNEL_LAYERS = { #added
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": ["rediss://red-cin3f1tph6evlaqlvsbg:iNQOmsWeOH0D5wYHhGNeNwZ0Z8AO6xIT@singapore-redis.render.com:6379"],
+        },
+    }
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -130,7 +144,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "backend.wsgi.application"
+# WSGI_APPLICATION = "backend.wsgi.application"
 
 
 # Database
@@ -168,7 +182,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Singapore"
 
 USE_I18N = True
 
@@ -194,3 +208,7 @@ CORS_ALLOW_ALL_ORIGINS = True #added. This is not secure, but it is the easiest 
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CELERY_BROKER_URL = "rediss://red-cin3f1tph6evlaqlvsbg:iNQOmsWeOH0D5wYHhGNeNwZ0Z8AO6xIT@singapore-redis.render.com:6379" #added
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
