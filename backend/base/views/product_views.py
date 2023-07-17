@@ -46,7 +46,8 @@ def createProduct(request):
         # brand = 'Sample Brand',
         countInStock=0,
         category='Sample Category',
-        description=''
+        description='',
+        expirationDate='2023-12-12'
     )
 
     serializer = ProductSerializer(product, many=False)
@@ -65,9 +66,20 @@ def updateProduct(request, pk):
     product.countInStock = data['countInStock']
     product.category = data['category']
     product.description = data['description']
+    product.expirationDate = data['expirationDate']
 
     product.save()
 
     serializer = ProductSerializer(product, many=False)
     return Response(serializer.data)
 
+
+@api_view(['POST'])
+def uploadImage(request):
+    data = request.data
+    product_id = data['product_id']
+    product = Product.objects.get(_id=product_id)
+
+    product.image = request.FILES.get('image')
+    product.save()
+    return Response('Image was uploaded')

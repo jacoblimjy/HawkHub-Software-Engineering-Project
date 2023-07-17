@@ -7,3 +7,6 @@
 
 #ignore celerybeat-schedule files
 **/celerybeat-schedule.*
+
+#ignore db.sqlite3
+db.sqlite3

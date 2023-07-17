@@ -68,11 +68,7 @@ function ProductListScreen({}) {
   return (
     <div>
       <Row className="align-items-center">
-        <Col>
-          <h1>Products</h1>
-        </Col>
-
-        <Col className="text-right">
+        <Col className="text-right ml-auto">
           <Button className="my-3" onClick={createProductHandler}>
             <i className="fas fa-plus"></i> Create Product
           </Button>
@@ -113,7 +109,7 @@ function ProductListScreen({}) {
                   {/* <td>{product.brand}</td> */}
 
                   <td>
-                    <LinkContainer to={`/admin/product/${product._id}/edit`}>
+                    <LinkContainer to={`/admin/${userInfo.supplier_id}/product/${product._id}/edit`}>
                       <Button variant="light" className="btn-sm">
                         <i className="fas fa-edit"></i>
                       </Button>

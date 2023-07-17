@@ -17,7 +17,7 @@ def addOrderItems(request):
     user = request.user
     data = request.data
 
-    orderItems = data['orderItems'] #data consists of orderItems, shippingAddress, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice seen in frontend/src/actions/orderActions.js
+    orderItems = data['orderItems'] 
 
     if orderItems and len(orderItems) == 0:
         return Response({'detail': 'No Order Items'}, status=status.HTTP_400_BAD_REQUEST)
@@ -50,6 +50,9 @@ def addOrderItems(request):
                 qty=i['qty'],
                 price=i['price'],
                 image=product.image.url,
+
+                user = order.user,
+                expirationDate=product.expirationDate,
             )
             # (4) Update stock
             product.countInStock -= item.qty
