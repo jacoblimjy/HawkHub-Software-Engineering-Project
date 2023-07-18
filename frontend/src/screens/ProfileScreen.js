@@ -88,9 +88,11 @@ function ProfileScreen({}) {
   const receiveHandler = async (order) => {
     if (window.confirm("Confirm order received?")) {
       try {
+        console.log("order", order);
         await dispatch(deliverOrder(order));
 
-        const orderItems = order.orderItems;
+        const orderItems = order.orderItems; 
+        console.log("orderItems", orderItems);
 
         for (let i = 0; i < orderItems.length; i++) {
           const orderItem = orderItems[i];

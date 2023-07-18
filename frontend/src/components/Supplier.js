@@ -10,18 +10,19 @@ function Supplier({ supplier }) {
       to={generatePath("/suppliers/:supplierId/products", {
         supplierId: supplier._id,
       })}
+      className = "link"
     >
       <Card className="my-3 p-3 rounded">
         <Card.Img
           src={supplier.image}
           className="rounded mx-auto d-block"
-          style={{ width: "250px", height: "250px" }}
+          style={{ width: "100%", height: "250px", objectFit: "contain" }}
         />
         {/* mx-auto is margin x-axis auto, d-block is display block */}
 
         <Card.Body>
           <Card.Text as="div">
-            <strong>{supplier.description}</strong>
+            <strong>{supplier.user.name}</strong>
           </Card.Text>
 
           <Card.Text as="div">

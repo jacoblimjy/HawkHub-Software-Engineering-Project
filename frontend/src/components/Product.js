@@ -12,6 +12,7 @@ function Product({ product }) {
         supplierId: supplierId,
         productId: product._id,
       })}
+      className="link"
     >
       <Card className="my-3 p-3 rounded">
         <Card.Img

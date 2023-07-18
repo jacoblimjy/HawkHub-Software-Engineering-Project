@@ -10,6 +10,12 @@ import {
     GET_SUPPLIER_REQUEST,
     GET_SUPPLIER_SUCCESS,
     GET_SUPPLIER_FAIL,
+
+    SUPPLIER_CREATE_REVIEW_REQUEST,
+    SUPPLIER_CREATE_REVIEW_SUCCESS,
+    SUPPLIER_CREATE_REVIEW_FAIL,
+    SUPPLIER_CREATE_REVIEW_RESET,
+    
 } from "../constants/supplierConstants";
 import axios from "axios";
 
@@ -68,3 +74,41 @@ export const getSupplierByUserId = (userId) => async (dispatch) => {
     });
   }
 };
+
+
+export const createSupplierReview = (supplierId, review) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: SUPPLIER_CREATE_REVIEW_REQUEST
+        })
+
+        const {
+            userLogin: { userInfo }
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.post(
+            `/api/suppliers/${supplierId}/reviews/`,
+            review,
+            config
+        )
+        dispatch({
+            type: SUPPLIER_CREATE_REVIEW_SUCCESS,
+            payload: data,
+        })
+
+    } catch (error) {
+        dispatch({
+            type: SUPPLIER_CREATE_REVIEW_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}

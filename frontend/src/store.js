@@ -10,6 +10,7 @@ import {
   supplierListReducer,
   supplierDetailsReducer,
   getSupplierReducer,
+  supplierReviewCreateReducer,
 } from "./reducers/supplierReducers";
 import {
   productListReducer,
@@ -56,6 +57,7 @@ const reducer = combineReducers({
   supplierList: supplierListReducer,
   supplierDetails: supplierDetailsReducer,
   getSupplier: getSupplierReducer,
+  supplierReviewCreate: supplierReviewCreateReducer,
 
   productList: productListReducer,
   productDetails: productDetailsReducer,
