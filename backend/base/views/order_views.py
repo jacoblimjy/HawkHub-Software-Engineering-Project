@@ -53,6 +53,7 @@ def addOrderItems(request):
 
                 user = order.user,
                 expirationDate=product.expirationDate,
+                unit = product.unit,
             )
             # (4) Update stock
             product.countInStock -= item.qty
@@ -109,7 +110,6 @@ def updateOrderToPaid(request, pk):
 
 
 @api_view(['PUT'])
-@permission_classes([IsAdminUser])
 def updateOrderToDelivered(request, pk):
     order = Order.objects.get(_id=pk)
 
@@ -118,3 +118,5 @@ def updateOrderToDelivered(request, pk):
     order.save()
 
     return Response('Order was delivered')
+
+

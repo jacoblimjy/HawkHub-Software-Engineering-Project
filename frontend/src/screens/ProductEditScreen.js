@@ -15,11 +15,11 @@ function ProductEditScreen({}) {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState("");
-  // const [brand, setBrand] = useState('')
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
+  const [unit, setUnit] = useState("");
 
   const [uploading, setUploading] = useState(false);
 
@@ -51,6 +51,7 @@ function ProductEditScreen({}) {
         setCountInStock(product.countInStock);
         setDescription(product.description);
         setExpirationDate(product.expirationDate);
+        setUnit(product.unit);
       }
     }
   }, [dispatch, product, productId, successUpdate]);
@@ -67,6 +68,7 @@ function ProductEditScreen({}) {
         countInStock,
         description,
         expirationDate,
+        unit,
       })
     );
   };
@@ -164,6 +166,16 @@ function ProductEditScreen({}) {
               ></Form.Control>
             </Form.Group>
 
+            <Form.Group controlId="unit">
+              <Form.Label>Unit</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter unit"
+                value={unit}
+                onChange={(e) => setUnit(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
             <Form.Group controlId="category">
               <Form.Label>Category</Form.Label>
               <Form.Control
@@ -184,7 +196,7 @@ function ProductEditScreen({}) {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="description">
+            <Form.Group controlId="expirationDate">
               <Form.Label>Expiration Date</Form.Label>
               <Form.Control
                 type="text"

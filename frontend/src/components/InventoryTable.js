@@ -130,7 +130,7 @@ export default function InventoryTable() {
       // Make the HTTP request to save in the backend
       const response = await mutateRow(newRow);
 
-      await dispatch(updateInventory(newRow));
+      await dispatch(updateInventory(newRow)); //new row's data is made 
 
       setSnackbar({
         children: "Changes successfully saved",
