@@ -163,11 +163,11 @@ function Sidebar({ open, onClose }) {
         </ListItem>
         <ListItem
           component={Link}
-          to="/"
+          to="/forum"
           onClick={handleDrawerClose}
           className="list-item"
         >
-          <ListItemText primary="Support" className="list-item-text" />
+          <ListItemText primary="Forum" className="list-item-text" />
         </ListItem>
       </List>
       <Typography

@@ -21,6 +21,8 @@ import ProductEditScreen from "./screens/ProductEditScreen";
 import FinanceScreen from "./screens/FinanceScreen";
 import PointOfSalesScreen from "./screens/PointOfSalesScreen";
 import NotificationScreen from "./screens/NotificationScreen";
+import ForumScreen from "./screens/ForumScreen";
+import ForumPostScreen from "./screens/ForumPostScreen";
 import { WebsocketProvider } from "./components/WebSocketProvider";
 
 const App = () => {
@@ -61,6 +63,8 @@ const App = () => {
               <Route path="/finance" element={<FinanceScreen />} />
               <Route path="/pos" element={<PointOfSalesScreen />} />
               <Route path="/notifications" element={<NotificationScreen />} />
+              <Route path="/forum" element={<ForumScreen />} />
+              <Route path="/forum/:forumPostId" element={<ForumPostScreen />} />
             </Routes>
           </Container>
         </main>

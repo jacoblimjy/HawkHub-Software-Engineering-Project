@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken #RefreshToken is a class that is built into django rest framework that allows us to generate a token for a user
 from base.models import UserProfile
-from .models import Supplier, Product, UserProfile, Ingredient, MenuItem, MenuIngredient,  ShippingAddress, Order, OrderItem, Financial, Notification, MenuItemSold, Review
+from .models import Supplier, Product, UserProfile, Ingredient, MenuItem, MenuIngredient,  ShippingAddress, Order, OrderItem, Financial, Notification, MenuItemSold, Review, ForumPost, ForumComment
 from django.contrib.auth.hashers import make_password
 
 class UserSerializer(serializers.ModelSerializer):
@@ -189,3 +189,24 @@ class MenuItemSoldSerializer(serializers.ModelSerializer):
         model = MenuItemSold
         field = '__all__'
 
+class ForumPostSerializer(serializers.ModelSerializer):
+    no_of_comments = serializers.SerializerMethodField(read_only=True)
+    username = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model = ForumPost
+        fields = '__all__'
+
+    def get_no_of_comments(self, obj):
+        return obj.forumcomment_set.count()
+    
+    def get_username(self, obj):
+        return obj.user.first_name
+
+class ForumCommentSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model = ForumComment
+        fields = '__all__'
+
+    def get_username(self, obj):
+        return obj.user.first_name
