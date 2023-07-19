@@ -12,6 +12,16 @@ import { PRODUCT_UPDATE_RESET } from "../constants/productConstants";
 function ProductEditScreen({}) {
   const { supplierId, productId } = useParams();
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/login");
+    } else {
+    }
+  }, [userInfo]);
+
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState("");
@@ -50,6 +60,7 @@ function ProductEditScreen({}) {
     loading: loadingUpdate,
     success: successUpdate,
   } = productUpdate;
+  
 
   useEffect(() => {
     if (successUpdate) {

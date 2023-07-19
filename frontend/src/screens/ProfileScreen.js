@@ -53,17 +53,27 @@ function ProfileScreen({}) {
     if (!userInfo) {
       navigate("/login");
     } else {
-      if (!user || !user.name || success) {
+      if (!user || !user.name || success || userInfo._id !== user._id) {
         dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetails("profile"));
-        dispatch(listMyOrders()); //added
-        dispatch(listInventories()); //added
+        // dispatch(listMyOrders());
+        // dispatch(listInventories());
       } else {
         setName(user.name);
         setEmail(user.email);
       }
     }
-  }, [dispatch, navigate, userInfo, user]);
+    console.log("Fetched orders in ProfileScreen:", orders);
+  }, [dispatch, navigate, userInfo, user, success]);
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/login");
+    } else {
+      dispatch(listMyOrders());
+      dispatch(listInventories());
+    }
+  }, [dispatch, navigate, userInfo]);
 
   useEffect(() => {
     if (successDeliver) {
@@ -138,7 +148,6 @@ function ProfileScreen({}) {
             unit: orderItem.unit,
             expirationDate: orderItem.expirationDate,
           };
-
           const existingInventoryItem = inventories.find(
             (inventory) => inventory.name === orderItem.name
           );
@@ -169,7 +178,8 @@ function ProfileScreen({}) {
         {error && <Message variant="danger">{error}</Message>}
         {loading && <Loader />}
 
-        {isSupplier && <Form.Group controlId="image">
+        {isSupplier && (
+          <Form.Group controlId="image">
             <Form.Label>Storefront Image</Form.Label>
             <Form.Control
               type="text"
@@ -187,7 +197,7 @@ function ProfileScreen({}) {
             />
             {uploading && <Loader />}
           </Form.Group>
-        }
+        )}
         <br />
         <Form onSubmit={submitHandler}>
           <Form.Group controlId="name">
