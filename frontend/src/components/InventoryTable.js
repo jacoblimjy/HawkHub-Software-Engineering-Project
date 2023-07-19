@@ -238,11 +238,13 @@ export default function InventoryTable() {
       editable: true,
       valueOptions: [
         { value: "Vegetables", label: "Vegetables" },
+        { value: "Noodles", label: "Noodles" },
         { value: "Fruits", label: "Fruits" },
         { value: "Meat", label: "Meat" },
         { value: "Seafood", label: "Seafood" },
         { value: "Dairy", label: "Dairy" },
         { value: "Baking and Grains", label: "Baking and Grains" },
+        { value: "Condiments and Sauces", label: "Condiments and Sauces"},
         { value: "Spices and Herbs", label: "Spices and Herbs" },
         { value: "Beverages", label: "Beverages" },
         { value: "Others", label: "Others" },
