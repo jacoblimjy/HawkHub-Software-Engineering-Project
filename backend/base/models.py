@@ -201,7 +201,7 @@ class MenuItemSold(models.Model):
 class ForumPost(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=200, null=True)
-    message = models.CharField(max_length=200, null=True)
+    message = models.CharField(max_length=500, null=True)
     date = models.DateField(auto_now_add=False, null=True, blank=True)
     _id = models.AutoField(primary_key=True, editable=False)
 
@@ -211,7 +211,7 @@ class ForumPost(models.Model):
 class ForumComment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     post = models.ForeignKey(ForumPost, on_delete=models.CASCADE)
-    message = models.CharField(max_length=200, null=True)
+    message = models.CharField(max_length=500, null=True)
     date = models.DateField(auto_now_add=False, null=True, blank=True)
     _id = models.AutoField(primary_key=True, editable=False)
 

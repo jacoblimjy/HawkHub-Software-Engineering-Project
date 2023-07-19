@@ -173,14 +173,22 @@ class MenuItemSoldSerializer(serializers.ModelSerializer):
 
 class ForumPostSerializer(serializers.ModelSerializer):
     no_of_comments = serializers.SerializerMethodField(read_only=True)
+    username = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = ForumPost
         fields = '__all__'
 
     def get_no_of_comments(self, obj):
         return obj.forumcomment_set.count()
+    
+    def get_username(self, obj):
+        return obj.user.first_name
 
 class ForumCommentSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = ForumComment
         fields = '__all__'
+
+    def get_username(self, obj):
+        return obj.user.first_name

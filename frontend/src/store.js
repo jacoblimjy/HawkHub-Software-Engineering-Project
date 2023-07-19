@@ -45,6 +45,16 @@ import {
   financialListReducer,
   financialUpdateReducer,
 } from "./reducers/financialReducers";
+import {
+  forumPostListReducer,
+  forumPostDetailsReducer,
+  forumPostCreateReducer,
+  forumPostUpdateReducer,
+  forumPostDeleteReducer,
+  forumCommentCreateReducer,
+  forumCommentUpdateReducer,
+  forumCommentDeleteReducer,
+} from "./reducers/forumReducers";
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -85,6 +95,15 @@ const reducer = combineReducers({
 
   financialList: financialListReducer,
   financialUpdate: financialUpdateReducer,
+
+  forumPostList: forumPostListReducer,
+  forumPostDetails: forumPostDetailsReducer,
+  forumPostCreate: forumPostCreateReducer,
+  forumPostUpdate: forumPostUpdateReducer,
+  forumPostDelete: forumPostDeleteReducer,
+  forumCommentCreate: forumCommentCreateReducer,
+  forumCommentUpdate: forumCommentUpdateReducer,
+  forumCommentDelete: forumCommentDeleteReducer,
 });
 
 const cartItemsFromStorage = localStorage.getItem("cartItems")

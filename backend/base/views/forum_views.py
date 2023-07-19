@@ -29,6 +29,17 @@ def getForumPosts(request):
     serializer = ForumPostSerializer(posts, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def getForumPost(request, pk):
+    try:
+        post = ForumPost.objects.get( _id=pk)
+        post_serializer = ForumPostSerializer(post, many=False)
+        comments = ForumComment.objects.filter(post=pk)
+        comments_serializer = ForumCommentSerializer(comments, many=True)
+        return Response({'post': post_serializer.data, 'comments': comments_serializer.data}, status=status.HTTP_200_OK)
+    except:
+        return Response({'message': "Error getting post."}, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def updateForumPost(request, pk):
@@ -100,3 +111,5 @@ def deleteForumComment(request, pk):
         return Response('Comment deleted', status=status.HTTP_200_OK)
     except:
         return Response({'message': 'Error deleting comment.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+
