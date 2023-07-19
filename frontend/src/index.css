@@ -56,3 +56,6 @@ h3 {
   color: white;
 }
 
+.link {
+  text-decoration: none; /* Remove underline */
+}

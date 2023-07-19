@@ -10,6 +10,7 @@ import {
   supplierListReducer,
   supplierDetailsReducer,
   getSupplierReducer,
+  supplierReviewCreateReducer,
 } from "./reducers/supplierReducers";
 import {
   productListReducer,
@@ -32,6 +33,7 @@ import {
   inventoryCreateReducer,
   inventoryUpdateReducer,
   inventoryDeleteReducer,
+  
 } from "./reducers/inventoryReducer";
 import {
   menuItemListReducer,
@@ -65,6 +67,7 @@ const reducer = combineReducers({
   supplierList: supplierListReducer,
   supplierDetails: supplierDetailsReducer,
   getSupplier: getSupplierReducer,
+  supplierReviewCreate: supplierReviewCreateReducer,
 
   productList: productListReducer,
   productDetails: productDetailsReducer,

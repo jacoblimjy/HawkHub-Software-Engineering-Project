@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken #RefreshToken is a class that is built into django rest framework that allows us to generate a token for a user
 from base.models import UserProfile
-from .models import Supplier, Product, UserProfile, Ingredient, MenuItem, MenuIngredient,  ShippingAddress, Order, OrderItem, Financial, Notification, MenuItemSold, ForumPost, ForumComment
+from .models import Supplier, Product, UserProfile, Ingredient, MenuItem, MenuIngredient,  ShippingAddress, Order, OrderItem, Financial, Notification, MenuItemSold, Review, ForumPost, ForumComment
 from django.contrib.auth.hashers import make_password
 
 class UserSerializer(serializers.ModelSerializer):
@@ -67,12 +67,30 @@ class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         exclude = ['user'] #exclude the user field from the serializer
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = '__all__'
     
 class SupplierSerializer(serializers.ModelSerializer):
+    reviews = serializers.SerializerMethodField(read_only=True)
+    user = serializers.SerializerMethodField(read_only=True)
+
     class Meta: #this is a class that is built into django rest framework which allows us to define some options for our serializer
         model = Supplier
         fields = '__all__' #this will serialize all the fields in the model (Supplier)
 
+    def get_reviews(self, obj):
+        reviews = obj.review_set.all()
+        serializer = ReviewSerializer(reviews, many=True)
+        return serializer.data
+        
+    def get_user(self, obj):
+        user = obj.user
+        serializer = UserSerializer(user, many=False)
+        return serializer.data
+    
 class ProductSerializer(serializers.ModelSerializer):
     class Meta: #this is a class that is built into django rest framework which allows us to define some options for our serializer
         model = Product

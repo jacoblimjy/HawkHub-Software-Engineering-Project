@@ -51,3 +51,23 @@ def deleteIngredient(request):
         return Response({"status": "success", "data": 'Ingredient deleted.'}, status=status.HTTP_200_OK)
     except:
         return Response({"status": "error", "data": 'Ingredient does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+# @api_view(['PUT'])
+# @permission_classes([IsAuthenticated])
+# def updateIngredientWithNameAndUser(request):
+#     data = request.data
+#     try:
+#         ingredient = Ingredient.objects.filter(user=request.user, name=data['name']).first()
+#         if ingredient:
+#             serializer = IngredientSerializer(instance=ingredient, data=request.data, partial=True)
+#             if serializer.is_valid():
+#                 serializer.save()
+#                 return Response(serializer.data, status=status.HTTP_200_OK)
+#             else:
+#                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         else:
+#             return Response({"error": "Ingredient not found"}, status=status.HTTP_404_NOT_FOUND)
+#     except Exception as e:
+#         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+

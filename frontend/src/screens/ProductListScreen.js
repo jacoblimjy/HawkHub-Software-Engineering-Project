@@ -94,7 +94,6 @@ function ProductListScreen({}) {
                 <th>NAME</th>
                 <th>PRICE</th>
                 <th>CATEGORY</th>
-                {/* <th>BRAND</th> */}
                 <th></th>
               </tr>
             </thead>
@@ -106,7 +105,6 @@ function ProductListScreen({}) {
                   <td>{product.name}</td>
                   <td>${product.price}</td>
                   <td>{product.category}</td>
-                  {/* <td>{product.brand}</td> */}
 
                   <td>
                     <LinkContainer to={`/admin/${userInfo.supplier_id}/product/${product._id}/edit`}>

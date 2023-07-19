@@ -47,7 +47,8 @@ def createProduct(request):
         countInStock=0,
         category='Sample Category',
         description='',
-        expirationDate='2023-12-12'
+        expirationDate='2023-12-12',
+        unit = ''
     )
 
     serializer = ProductSerializer(product, many=False)
@@ -62,11 +63,11 @@ def updateProduct(request, pk):
 
     product.name = data['name']
     product.price = data['price']
-    # product.brand = data['brand']
     product.countInStock = data['countInStock']
     product.category = data['category']
     product.description = data['description']
     product.expirationDate = data['expirationDate']
+    product.unit = data['unit']
 
     product.save()
 

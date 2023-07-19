@@ -2,12 +2,20 @@ import {
   SUPPLIER_LIST_REQUEST,
   SUPPLIER_LIST_SUCCESS,
   SUPPLIER_LIST_FAIL,
+
   SUPPLIER_DETAILS_REQUEST,
   SUPPLIER_DETAILS_SUCCESS,
   SUPPLIER_DETAILS_FAIL,
+
   GET_SUPPLIER_REQUEST,
   GET_SUPPLIER_SUCCESS,
   GET_SUPPLIER_FAIL,
+
+  SUPPLIER_CREATE_REVIEW_REQUEST,
+  SUPPLIER_CREATE_REVIEW_SUCCESS,
+  SUPPLIER_CREATE_REVIEW_FAIL,
+  SUPPLIER_CREATE_REVIEW_RESET,
+  
 } from "../constants/supplierConstants";
 
 export const supplierListReducer = (state = { suppliers: [] }, action) => {
@@ -62,3 +70,22 @@ export const getSupplierReducer = (state = { supplier: {} }, action) => {
       return state;
   }
 };
+
+export const supplierReviewCreateReducer = (state = {}, action) => {
+  switch (action.type) {
+      case SUPPLIER_CREATE_REVIEW_REQUEST:
+          return { loading: true }
+
+      case SUPPLIER_CREATE_REVIEW_SUCCESS:
+          return { loading: false, success: true, }
+
+      case SUPPLIER_CREATE_REVIEW_FAIL:
+          return { loading: false, error: action.payload }
+
+      case SUPPLIER_CREATE_REVIEW_RESET:
+          return {}
+
+      default:
+          return state
+  }
+}

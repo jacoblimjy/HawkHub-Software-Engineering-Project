@@ -73,7 +73,7 @@ function PlaceOrderScreen({ }) {
                                 {cart.paymentMethod}
                             </p>
                         </ListGroup.Item>
-
+                        
                         <ListGroup.Item>
                             <h2>Order Items</h2>
                             {cart.cartItems.length === 0 ? <Message variant='info'>

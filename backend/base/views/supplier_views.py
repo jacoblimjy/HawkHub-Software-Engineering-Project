@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 # this is a class that is built into django rest framework that allows us to check if a user is authenticated or not
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
-from base.models import Supplier, Product
+from base.models import Supplier, Product, Review
 from base.serializers import SupplierSerializer, ProductSerializer
 
 # this is a function that is built into django that allows us to hash a password
@@ -54,3 +54,38 @@ def getSupplierByUserId(request, pk):
         message = {'detail': 'Supplier does not exist'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createSupplierReview(request, pk):
+    user = request.user
+    supplier = Supplier.objects.get(_id=pk)
+    data = request.data
+
+    alreadyExists = supplier.review_set.filter(user=user).exists()
+    if alreadyExists:
+        content = {'detail': 'Supplier already reviewed'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif data['rating'] == 0:
+        content = {'detail': 'Please select a rating'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    
+    else:
+        review = Review.objects.create(
+            user=user,
+            supplier=supplier,
+            name=user.first_name,
+            rating=data['rating'],
+            comment=data['comment'],
+        )
+
+        reviews = supplier.review_set.all()
+        supplier.numReviews = len(reviews)
+        total = 0
+        for i in reviews:
+            total += i.rating
+        supplier.rating = total / len(reviews)
+        supplier.save()
+        return Response('Review Added')
+    
+        

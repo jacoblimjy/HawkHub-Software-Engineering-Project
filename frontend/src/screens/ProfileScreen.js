@@ -7,7 +7,13 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { getUserDetails, updateUserProfile } from "../actions/userActions";
 import { USER_UPDATE_PROFILE_RESET } from "../constants/userConstants";
-import { listMyOrders } from "../actions/orderActions"; //added
+import { listMyOrders, deliverOrder } from "../actions/orderActions";
+import {
+  createInventory,
+  updateInventory,
+  listInventories,
+} from "../actions/inventoryActions";
+import { ORDER_DELIVER_RESET } from "../constants/orderConstants";
 
 function ProfileScreen({}) {
   const [name, setName] = useState("");
@@ -18,6 +24,9 @@ function ProfileScreen({}) {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const inventoryList = useSelector((state) => state.inventoryList);
+  const { inventoryListLoading, inventoryListError, inventories } = inventoryList;
 
   const userDetails = useSelector((state) => state.userDetails);
   const { error, loading, user } = userDetails;
@@ -31,6 +40,9 @@ function ProfileScreen({}) {
   const orderListMy = useSelector((state) => state.orderListMy); //added
   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy;
 
+  const orderDeliver = useSelector((state) => state.orderDeliver);
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
+
   useEffect(() => {
     if (!userInfo) {
       navigate("/login");
@@ -39,12 +51,20 @@ function ProfileScreen({}) {
         dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetails("profile"));
         dispatch(listMyOrders()); //added
+        dispatch(listInventories()); //added
       } else {
         setName(user.name);
         setEmail(user.email);
       }
     }
   }, [dispatch, navigate, userInfo, user]);
+
+  useEffect(() => {
+    if (successDeliver) {
+      dispatch(listMyOrders());
+      dispatch({ type: ORDER_DELIVER_RESET });
+    }
+  }, [dispatch, successDeliver]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -64,6 +84,48 @@ function ProfileScreen({}) {
       setMessage("");
     }
   };
+
+  const receiveHandler = async (order) => {
+    if (window.confirm("Confirm order received?")) {
+      try {
+        console.log("order", order);
+        await dispatch(deliverOrder(order));
+
+        const orderItems = order.orderItems; 
+        console.log("orderItems", orderItems);
+
+        for (let i = 0; i < orderItems.length; i++) {
+          const orderItem = orderItems[i];
+          const data = {
+            name: orderItem.name,
+            category: orderItem.category,
+            cost: orderItem.price,
+            countInStock: orderItem.qty,
+            unit: orderItem.unit,
+            expirationDate: orderItem.expirationDate,
+          };
+
+          const existingInventoryItem = inventories.find(
+            (inventory) => inventory.name === orderItem.name
+          );
+
+          if (existingInventoryItem) {
+            const updatedData = {
+              ...existingInventoryItem,
+              countInStock: existingInventoryItem.countInStock + orderItem.qty,
+            };
+            await dispatch(updateInventory(updatedData));
+          } else {
+            const createdInventory = await dispatch(createInventory(data));
+          }
+        }
+        await dispatch(listInventories());
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <Row>
       <Col md={3}>
@@ -121,9 +183,9 @@ function ProfileScreen({}) {
         </Form>
       </Col>
 
-      <Col md={9}> 
+      <Col md={9}>
         {/* added */}
-        <h2>My Orders</h2> 
+        <h2>My Orders</h2>
         {loadingOrders ? (
           <Loader />
         ) : errorOrders ? (
@@ -136,13 +198,13 @@ function ProfileScreen({}) {
                 <th>Date</th>
                 <th>Total</th>
                 <th>Paid</th>
-                <th>Delivered</th>
-                <th></th>
+                <th>Details</th>
+                <th>Received</th>
               </tr>
             </thead>
 
             <tbody>
-              {orders.map((order) => ( 
+              {orders.map((order) => (
                 <tr key={order._id}>
                   <td>{order._id}</td>
                   <td>{order.createdAt.substring(0, 10)}</td>
@@ -159,13 +221,26 @@ function ProfileScreen({}) {
                       <Button className="btn-sm">Details</Button>
                     </LinkContainer>
                   </td>
+
+                  <td>
+                    {order.isDelivered ? (
+                      order.deliveredAt.substring(0, 10)
+                    ) : (
+                      <Button
+                        type="button"
+                        className="btn-sm"
+                        onClick={() => receiveHandler(order)}
+                      >
+                        Received
+                      </Button>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </Table>
         )}
-      </Col> 
-      
+      </Col>
     </Row>
   );
 }
