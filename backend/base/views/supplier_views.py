@@ -89,3 +89,12 @@ def createSupplierReview(request, pk):
         return Response('Review Added')
     
         
+@api_view(['POST'])
+def uploadImage(request):
+    data = request.data
+    supplier_id = data['supplier_id']
+    supplier = Supplier.objects.get(_id=supplier_id)
+
+    supplier.image = request.FILES.get('image')
+    supplier.save()
+    return Response('Image was uploaded')

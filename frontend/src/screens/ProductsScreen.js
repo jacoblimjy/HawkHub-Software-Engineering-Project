@@ -63,14 +63,15 @@ function ProductsScreen({}) {
     // dispatch(listSupplierDetails(supplierId));
   }, [dispatch, successSupplierReview]);
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    dispatch(
+    await dispatch(
       createSupplierReview(supplierId, {
         rating,
         comment,
       })
     );
+    await dispatch(listSupplierDetails(supplierId));
   };
 
   return (
@@ -89,7 +90,7 @@ function ProductsScreen({}) {
               </Col>
             ))}
           </Row>
-
+          
           <Row>
             <Col md={6}>
               <h4>Reviews</h4>

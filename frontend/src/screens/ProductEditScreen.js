@@ -128,15 +128,15 @@ function ProductEditScreen({}) {
             </Form.Group>
 
             <Form.Group controlId="image">
-              <Form.Label>Image</Form.Label>
+              <Form.Label>Product Image</Form.Label> 
               <Form.Control
                 type="text"
-                placeholder="Enter image URL"
+                placeholder="Image"
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               />
 
-              <Form.Label className="mx-2"> Upload Image: </Form.Label> 
+              {/* <Form.Label className="mx-2"> Upload Image: </Form.Label>  */}
               <input
                 type="file"
                 id="image-file"

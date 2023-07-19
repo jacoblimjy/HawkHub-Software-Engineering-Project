@@ -14,6 +14,7 @@ import {
   listInventories,
 } from "../actions/inventoryActions";
 import { ORDER_DELIVER_RESET } from "../constants/orderConstants";
+import axios from "axios";
 
 function ProfileScreen({}) {
   const [name, setName] = useState("");
@@ -26,7 +27,8 @@ function ProfileScreen({}) {
   const navigate = useNavigate();
 
   const inventoryList = useSelector((state) => state.inventoryList);
-  const { inventoryListLoading, inventoryListError, inventories } = inventoryList;
+  const { inventoryListLoading, inventoryListError, inventories } =
+    inventoryList;
 
   const userDetails = useSelector((state) => state.userDetails);
   const { error, loading, user } = userDetails;
@@ -42,6 +44,10 @@ function ProfileScreen({}) {
 
   const orderDeliver = useSelector((state) => state.orderDeliver);
   const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
+
+  const isSupplier = userInfo?.isSupplier;
+  const [image, setImage] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (!userInfo) {
@@ -66,6 +72,34 @@ function ProfileScreen({}) {
     }
   }, [dispatch, successDeliver]);
 
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+
+    formData.append("image", file);
+    formData.append("supplier_id", userInfo.supplier_id);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/suppliers/upload/",
+        formData,
+        config
+      );
+
+      setImage(data);
+      setUploading(false);
+    } catch (error) {
+      setUploading(false);
+    }
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
 
@@ -88,11 +122,11 @@ function ProfileScreen({}) {
   const receiveHandler = async (order) => {
     if (window.confirm("Confirm order received?")) {
       try {
-        console.log("order", order);
+        // console.log("order", order);
         await dispatch(deliverOrder(order));
 
-        const orderItems = order.orderItems; 
-        console.log("orderItems", orderItems);
+        const orderItems = order.orderItems;
+        // console.log("orderItems", orderItems);
 
         for (let i = 0; i < orderItems.length; i++) {
           const orderItem = orderItems[i];
@@ -134,6 +168,27 @@ function ProfileScreen({}) {
         {message && <Message variant="danger">{message}</Message>}
         {error && <Message variant="danger">{error}</Message>}
         {loading && <Loader />}
+
+        {isSupplier && <Form.Group controlId="image">
+            <Form.Label>Storefront Image</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Upload image"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+            />
+
+            {/* <Form.Label className="mx-2"> Upload Image: </Form.Label> */}
+            <input
+              type="file"
+              id="image-file"
+              label="Choose File"
+              onChange={uploadFileHandler}
+            />
+            {uploading && <Loader />}
+          </Form.Group>
+        }
+        <br />
         <Form onSubmit={submitHandler}>
           <Form.Group controlId="name">
             <Form.Label>Name</Form.Label>
