@@ -1,34 +1,42 @@
 import React from "react";
-import { Card } from "react-bootstrap";
-import { Link, generatePath, useParams } from "react-router-dom";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import Rating from "./Rating";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
+import { generatePath } from "react-router-dom";
 
 function Product({ product }) {
   const { supplierId } = useParams();
+
   return (
-    //my-3 is margin top and bottom 3, p-3 is padding 3, rounded is rounded corners
-    <Link
+    <RouterLink
+      component={RouterLink}
       to={generatePath("/suppliers/:supplierId/products/:productId", {
         supplierId: supplierId,
         productId: product._id,
       })}
       className="link"
     >
-      <Card className="my-3 p-3 rounded">
-        <Card.Img
+      <Card sx={{ my: 3, p: 3, borderRadius: "16px" }}>
+        <CardMedia
+          component="img"
           src={product.image}
-          className="rounded mx-auto d-block"
+          alt="Product Image"
           style={{ width: "100%", height: "200px", objectFit: "contain" }}
-          // other than cover, you can use contain, fill, none, scale-down
         />
-        <Card.Body>
-          <Card.Title as="div">
+        <CardContent>
+          <Typography variant="subtitle1" component="div">
             <strong>{product.name}</strong>
-          </Card.Title>
-          <Card.Text as="h3">${product.price}</Card.Text>
-        </Card.Body>
+          </Typography>
+          <Typography variant="b3" component="div">
+            ${product.price}
+          </Typography>
+        </CardContent>
       </Card>
-    </Link>
+    </RouterLink>
   );
 }
 

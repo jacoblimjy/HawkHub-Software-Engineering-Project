@@ -39,7 +39,8 @@ h3 {
   background-color: white;
 }
 
-.list-item {
+.list-item { 
+  /* list-item is seen in the sidebar and the navbar and has the same styles */
   /* Custom styles for the ListItem component */
   position: relative; /* Add positioning for ::before pseudo-element */
   border-radius: 30px; 

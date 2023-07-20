@@ -1,7 +1,11 @@
 import React from "react";
-import { Card } from "react-bootstrap";
-import { Link, generatePath } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import Rating from "./Rating";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import { generatePath } from "react-router-dom";
 
 function Supplier({ supplier }) {
   const productCategories = supplier.products
@@ -18,30 +22,30 @@ function Supplier({ supplier }) {
   }
 
   return (
-    <Link
+    <RouterLink
       to={generatePath("/suppliers/:supplierId/products", {
         supplierId: supplier._id,
       })}
       className="link"
     >
-      <Card className="my-3 p-3 rounded">
-        <Card.Img
+      <Card sx={{ my: 3, p: 3, borderRadius: "16px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", }}>
+        <CardMedia
+          component="img"
           src={supplier.image}
-          className="rounded mx-auto d-block"
+          alt="Supplier Image"
           style={{ width: "100%", height: "250px", objectFit: "contain" }}
         />
 
-        <Card.Body style={{ height: "100px" }}>
-          <Card.Text as="div">
+        <CardContent style={{ height: "100px" }}>
+          <Typography variant="subtitle1" component="div">
             <strong>{supplier.user.name}</strong>
-          </Card.Text>
+          </Typography>
 
-          {/* Show first product category and "Others" */}
-          <Card.Text as="div" style={{ color: "grey" }}>
+          <Typography variant="body2" component="div" sx={{ color: "grey" }}>
             {displayCategories.join(", ")}
-          </Card.Text>
+          </Typography>
 
-          <Card.Text as="div">
+          <Typography variant="body2" component="div">
             <div className="my-3">
               <Rating
                 value={supplier.rating}
@@ -49,10 +53,10 @@ function Supplier({ supplier }) {
                 color={"#f8e825"}
               />
             </div>
-          </Card.Text>
-        </Card.Body>
+          </Typography>
+        </CardContent>
       </Card>
-    </Link>
+    </RouterLink>
   );
 }
 

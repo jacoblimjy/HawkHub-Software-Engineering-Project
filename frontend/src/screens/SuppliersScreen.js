@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Col, Row } from "react-bootstrap";
+import { Grid } from "@mui/material"; // Import Grid from Material-UI
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { listSuppliers } from "../actions/supplierActions";
@@ -8,10 +8,10 @@ import Supplier from "../components/Supplier";
 import TextField from "@mui/material/TextField";
 
 function SuppliersScreen() {
-  const dispatch = useDispatch(); //useDispatch is a hook that gives us access to the dispatch function, we can use it to dispatch actions, dispatch means to send out
-  const supplierList = useSelector((state) => state.supplierList); //supplierList is from store.js, state is the global state, state.supplierList is from reducer, reducer is from supplierReducer.js
-  const { loading, error, suppliers } = supplierList; //destructure supplierList into loading, error, and products as stated in supplierReducer.js
-  const [searchField, setSearchField] = React.useState("");
+  const dispatch = useDispatch();
+  const supplierList = useSelector((state) => state.supplierList);
+  const { loading, error, suppliers } = supplierList;
+  const [searchField, setSearchField] = useState("");
 
   const filteredSuppliers = suppliers.filter((supplier) => {
     const nameMatch = supplier.user.name
@@ -29,14 +29,13 @@ function SuppliersScreen() {
     return nameMatch || categoryMatch || productMatch;
   });
 
-
   const handleChange = (e) => {
     setSearchField(e.target.value);
   };
 
   useEffect(() => {
     dispatch(listSuppliers());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>
@@ -51,15 +50,22 @@ function SuppliersScreen() {
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error}</Message> //if there is an error, display the error message
+        <Message variant="danger">{error}</Message>
       ) : (
-        <Row>
-          {filteredSuppliers.map((supplier) => (
-            <Col key={supplier._id} sm={12} md={6} lg={4} xl={3}>
-              <Supplier supplier={supplier} />
-            </Col>
-          ))}
-        </Row>
+        <Grid container spacing={3}>
+          {/* Use Grid instead of Row and Col */}
+          {filteredSuppliers.map((supplier) => {
+            if (supplier.products.length > 0) {
+              return (
+                <Grid key={supplier._id} item xs={12} sm={6} md={4} lg={3}>
+                  <Supplier supplier={supplier} />
+                </Grid>
+              );
+            } else {
+              return null; // Exclude suppliers with no products
+            }
+          })}
+        </Grid>
       )}
     </div>
   );
