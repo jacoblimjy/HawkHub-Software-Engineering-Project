@@ -77,6 +77,13 @@ function ProductsScreen({}) {
   return (
     <div>
       <h1>Products</h1>
+      <Link
+        to={`/suppliers/`}
+        className="btn btn-dark my-3"
+      >
+        {" "}
+        Go Back{" "}
+      </Link>
       {loading ? (
         <Loader />
       ) : error ? (
@@ -84,7 +91,7 @@ function ProductsScreen({}) {
       ) : (
         <div>
           <Row>
-            {products.map((product) => (
+            {products.filter((product) => product.name !== "Sample Name").map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                 <Product product={product} />
               </Col>

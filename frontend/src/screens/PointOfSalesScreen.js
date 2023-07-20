@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
@@ -50,28 +51,33 @@ function PointOfSalesScreen() {
   return (
     <div>
       <h1>Point of Sales</h1>
+      <div style={{ marginBottom: "20px" }}>
+        <Link to="/finance/">Go Back</Link>
+      </div>
       {loading ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
-        <Grid container spacing={2}>
-          {menuItems &&
-            menuItems.map((item) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={item._id}>
-                <Button
-                  onClick={(event) => handleClick(item._id, item.name, event)}
-                  variant="outlined"
-                  color="warning"
-                  size="large"
-                  sx={{ py: 4 }}
-                  fullWidth
-                >
-                  {item.name}
-                </Button>
-              </Grid>
-            ))}
-        </Grid>
+        <>
+          <Grid container spacing={2} style={{ marginBottom: "20px" }}>
+            {menuItems &&
+              menuItems.map((item) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={item._id}>
+                  <Button
+                    onClick={(event) => handleClick(item._id, item.name, event)}
+                    variant="outlined"
+                    color="warning"
+                    size="large"
+                    sx={{ py: 4 }}
+                    fullWidth
+                  >
+                    {item.name}
+                  </Button>
+                </Grid>
+              ))}
+          </Grid>
+        </>
       )}
       {!!snackbar && (
         <Snackbar

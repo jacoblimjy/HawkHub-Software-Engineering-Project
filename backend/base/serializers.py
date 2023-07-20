@@ -76,6 +76,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 class SupplierSerializer(serializers.ModelSerializer):
     reviews = serializers.SerializerMethodField(read_only=True)
     user = serializers.SerializerMethodField(read_only=True)
+    products = serializers.SerializerMethodField(read_only=True)
 
     class Meta: #this is a class that is built into django rest framework which allows us to define some options for our serializer
         model = Supplier
@@ -89,6 +90,11 @@ class SupplierSerializer(serializers.ModelSerializer):
     def get_user(self, obj):
         user = obj.user
         serializer = UserSerializer(user, many=False)
+        return serializer.data
+    
+    def get_products(self, obj):
+        product = obj.product_set.all()
+        serializer = ProductSerializer(product, many=True)
         return serializer.data
     
 class ProductSerializer(serializers.ModelSerializer):

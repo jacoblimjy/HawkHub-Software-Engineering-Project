@@ -40,7 +40,8 @@ function ProductListScreen({}) {
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    if (!userInfo) {
+    console.log(userInfo);
+    if (!userInfo || !userInfo.supplier_id) {
       navigate("/login");
     } else {
       dispatch({ type: PRODUCT_CREATE_RESET });
@@ -107,19 +108,23 @@ function ProductListScreen({}) {
                   <td>{product.category}</td>
 
                   <td>
-                    <LinkContainer to={`/admin/${userInfo.supplier_id}/product/${product._id}/edit`}>
-                      <Button variant="light" className="btn-sm">
-                        <i className="fas fa-edit"></i>
-                      </Button>
-                    </LinkContainer>
+                    {userInfo && ( // Add this condition to check if userInfo exists
+                      <>
+                        <LinkContainer to={`/admin/${userInfo.supplier_id}/product/${product._id}/edit`}>
+                          <Button variant="light" className="btn-sm">
+                            <i className="fas fa-edit"></i>
+                          </Button>
+                        </LinkContainer>
 
-                    <Button
-                      variant="danger"
-                      className="btn-sm"
-                      onClick={() => deleteHandler(product._id)}
-                    >
-                      <i className="fas fa-trash"></i>
-                    </Button>
+                        <Button
+                          variant="danger"
+                          className="btn-sm"
+                          onClick={() => deleteHandler(product._id)}
+                        >
+                          <i className="fas fa-trash"></i>
+                        </Button>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))}

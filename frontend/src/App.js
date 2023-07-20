@@ -63,6 +63,7 @@ const App = () => {
               />
               <Route path="/finance" element={<FinanceScreen />} />
               <Route path="/pos" element={<PointOfSalesScreen />} />
+              <Route path="/guide" element={<GuideScreen />} />
               <Route path="/notifications" element={<NotificationScreen />} />
               <Route path="/forum" element={<ForumScreen />} />
               <Route path="/forum/:forumPostId" element={<ForumPostScreen />} />

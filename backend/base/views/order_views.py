@@ -54,6 +54,7 @@ def addOrderItems(request):
                 user = order.user,
                 expirationDate=product.expirationDate,
                 unit = product.unit,
+                category = product.category,
             )
             # (4) Update stock
             product.countInStock -= item.qty

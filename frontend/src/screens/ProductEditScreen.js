@@ -12,6 +12,16 @@ import { PRODUCT_UPDATE_RESET } from "../constants/productConstants";
 function ProductEditScreen({}) {
   const { supplierId, productId } = useParams();
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/login");
+    } else {
+    }
+  }, [userInfo]);
+
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState("");
@@ -20,6 +30,21 @@ function ProductEditScreen({}) {
   const [description, setDescription] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
   const [unit, setUnit] = useState("");
+
+  const unitOptions = ["kg", "g", "L", "mL", "pc"];
+  const categoryOptions = [
+    "Vegetables",
+    "Noodles",
+    "Fruits",
+    "Meat",
+    "Seafood",
+    "Dairy",
+    "Baking and Grains",
+    "Condiments and Sauces",
+    "Spices and Herbs",
+    "Beverages",
+    "Others",
+  ];
 
   const [uploading, setUploading] = useState(false);
 
@@ -35,6 +60,7 @@ function ProductEditScreen({}) {
     loading: loadingUpdate,
     success: successUpdate,
   } = productUpdate;
+  
 
   useEffect(() => {
     if (successUpdate) {
@@ -128,7 +154,7 @@ function ProductEditScreen({}) {
             </Form.Group>
 
             <Form.Group controlId="image">
-              <Form.Label>Product Image</Form.Label> 
+              <Form.Label>Product Image</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Image"
@@ -169,21 +195,31 @@ function ProductEditScreen({}) {
             <Form.Group controlId="unit">
               <Form.Label>Unit</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Enter unit"
+                as="select"
                 value={unit}
                 onChange={(e) => setUnit(e.target.value)}
-              ></Form.Control>
+              >
+                {unitOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </Form.Control>
             </Form.Group>
 
             <Form.Group controlId="category">
               <Form.Label>Category</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Enter category"
+                as="select"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-              ></Form.Control>
+              >
+                {categoryOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </Form.Control>
             </Form.Group>
 
             <Form.Group controlId="description">
