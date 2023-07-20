@@ -77,6 +77,13 @@ function ProductsScreen({}) {
   return (
     <div>
       <h1>Products</h1>
+      <Link
+        to={`/suppliers/`}
+        className="btn btn-dark my-3"
+      >
+        {" "}
+        Go Back{" "}
+      </Link>
       {loading ? (
         <Loader />
       ) : error ? (

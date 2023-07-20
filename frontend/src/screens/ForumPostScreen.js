@@ -43,6 +43,9 @@ export default function ForumPostScreen() {
   return (
     <div>
       <h1>Forum Post</h1>
+      <div style={{ marginBottom: "20px" }}>
+        <Link to="/forum/">Go Back</Link>
+      </div>
       {loading ? (
         <Loader />
       ) : error ? (
