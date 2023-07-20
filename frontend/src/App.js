@@ -67,6 +67,7 @@ const App = () => {
               <Route path="/notifications" element={<NotificationScreen />} />
               <Route path="/forum" element={<ForumScreen />} />
               <Route path="/forum/:forumPostId" element={<ForumPostScreen />} />
+              <Route path="/guide" element={<GuideScreen />} />
             </Routes>
           </Container>
         </main>

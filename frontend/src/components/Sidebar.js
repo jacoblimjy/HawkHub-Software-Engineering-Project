@@ -129,7 +129,7 @@ function Sidebar({ open, onClose }) {
         </ListItem>
         <ListItem
           component={Link}
-          to="/guide/"
+          to="/guide"
           onClick={handleDrawerClose}
           className="list-item"
         >
