@@ -1,49 +1,25 @@
-import { Box, Button, styled, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  styled,
+  Typography,
+  Card,
+  CardMedia,
+  CardContent,
+  CardActionArea,
+} from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
 import hawkhubplus from "../assets/hawkhubplus.png";
 import star from "../assets/Star.png";
 import hawker from "../assets/hawker.webp";
+import { Link } from "react-router-dom";
+import stock from "../assets/stock.avif";
+import fin from "../assets/fin.jpg";
+import ecommerce from "../assets/cover_multivendor.jpg";
+import { useSelector } from "react-redux";
 
 function HomeScreen() {
-  const CustomButton = ({
-    backgroundColor,
-    color,
-    buttonText,
-    heroBtn,
-    guideBtn,
-    getStartedBtn,
-  }) => {
-    const CustomButton = styled(Button)(({ theme }) => ({
-      backgroundColor: backgroundColor,
-      color: color,
-      fontWeight: "700",
-      fontSize: "14px",
-      cursor: "pointer",
-      padding: "0.5rem 1.25rem",
-      borderRadius: "7px",
-      textTransform: "none",
-      display: "block",
-      border: "2px solid transparent",
-      "&:hover": {
-        backgroundColor: color,
-        color: backgroundColor,
-        borderColor: backgroundColor,
-      },
-      [theme.breakpoints.down("md")]: {
-        margin:
-          (heroBtn || getStartedBtn) && theme.spacing(0, "auto", 3, "auto"),
-        width: (heroBtn || getStartedBtn) && "90%",
-      },
-      [theme.breakpoints.down("sm")]: {
-        marginTop: guideBtn && theme.spacing(3),
-        width: guideBtn && "90%",
-      },
-    }));
-
-    return <CustomButton>{buttonText}</CustomButton>;
-  };
-
   const CustomBox = styled(Box)(({ theme }) => ({
     display: "flex",
     justifyContent: "center",
@@ -66,6 +42,34 @@ function HomeScreen() {
       fontSize: "40px",
     },
   }));
+
+  const MainFeaturesContainer = styled(Box)(({ theme }) => ({
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+    gap: theme.spacing(3),
+    marginTop: theme.spacing(5),
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+    },
+  }));
+
+  const MainFeatureCard = styled(Box)(({ theme }) => ({
+    width: "350px",
+    height: "230px",
+    padding: theme.spacing(2),
+    textAlign: "center",
+    backgroundColor: "#faf6f0",
+    borderRadius: theme.spacing(1),
+    boxShadow: "0px 3px 6px #00000029",
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+    },
+  }));
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+  const isSupplier = userInfo?.isSupplier;
 
   return (
     <>
@@ -95,12 +99,21 @@ function HomeScreen() {
                 their inventory and finances, as well as make business purchases
                 with ease.
               </Typography>
-              <CustomButton
-                backgroundColor="#000000"
-                color="#fff"
-                buttonText="More About Us"
-                heroBtn={true}
-              />
+              <Link to={`/guide/`}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    color: "white",
+                    backgroundColor: "black",
+                    "&:hover": {
+                      backgroundColor: "grey",
+                      color: "white",
+                    },
+                  }}
+                >
+                  Learn more
+                </Button>
+              </Link>
             </Box>
 
             <Box sx={{ flex: "1.25" }}>
@@ -161,10 +174,7 @@ function HomeScreen() {
           mt: 5,
         }}
       >
-        <Typography
-          variant="h3"
-          sx={{ fontSize: "20px", fontWeight: "bold" }}
-        >
+        <Typography variant="h3" sx={{ fontSize: "20px", fontWeight: "bold" }}>
           Our Story
         </Typography>
 
@@ -178,8 +188,30 @@ function HomeScreen() {
               color: "#5A6473",
             }}
           >
-            <p>  Managing finances and inventory can be a cumbersome task for Hawkers, who frequently rely on manual processes to keep track of their business operations. We acknowledge the vital role that Hawkers play in our communities. Oftentimes, they are small business owners who contribute to the local economy, and they provide delicious and affordable food options. By supporting hawkers with our web application, we hope to help them succeed in their businesses and encourage a new generation of Hawkers. </p>
-            <p>  By making it easier for Hawkers to manage their businesses and locate supplies, they can concentrate on perfecting their culinary skills. This can indirectly benefit customers who enjoy affordable, high-quality food options. In addition, our web application will help suppliers expand their customer base and grow their businesses. Ultimately, supporting hawkers is about contributing to the local economy and creating vibrant and diverse communities. By developing a platform that supports the entire food culture ecosystem, we hope to contribute to the preservation of local food and the development of stronger communities. </p>
+            <p>
+              {" "}
+              Managing finances and inventory can be a cumbersome task for
+              Hawkers, who frequently rely on manual processes to keep track of
+              their business operations. We acknowledge the vital role that
+              Hawkers play in our communities. Oftentimes, they are small
+              business owners who contribute to the local economy, and they
+              provide delicious and affordable food options. By supporting
+              hawkers with our web application, we hope to help them succeed in
+              their businesses and encourage a new generation of Hawkers.{" "}
+            </p>
+            <p>
+              {" "}
+              By making it easier for Hawkers to manage their businesses and
+              locate supplies, they can concentrate on perfecting their culinary
+              skills. This can indirectly benefit customers who enjoy
+              affordable, high-quality food options. In addition, our web
+              application will help suppliers expand their customer base and
+              grow their businesses. Ultimately, supporting hawkers is about
+              contributing to the local economy and creating vibrant and diverse
+              communities. By developing a platform that supports the entire
+              food culture ecosystem, we hope to contribute to the preservation
+              of local food and the development of stronger communities.{" "}
+            </p>
           </Typography>
         </CustomBox>
       </Box>
@@ -193,41 +225,133 @@ function HomeScreen() {
           mt: 2,
         }}
       >
-        <Typography
-          variant="h3"
-          sx={{ fontSize: "20px", fontWeight: "bold" }}
-        >
+        <Typography variant="h3" sx={{ fontSize: "20px", fontWeight: "bold" }}>
           Main Features
         </Typography>
         <Typography
-            variant="body2"
-            sx={{
-              fontSize: "18px",
-              fontWeight: "100",
-              color: "#5A6473",
-              textAlign: "center",
-            }}
-          >
-            New here? <br/>
-            Our platform features 3 Main Features: Namely StockTracker, FinanceTracker & Multi-Vendor(Suppliers) Ecommerce Space. <br/>            
-          </Typography>
-          {/* <Typography
-            variant="body2"
-            sx={{
-              fontSize: "18px",
-              fontWeight: "100",
-              color: "#5A6473",
-              mt: 2,
-            }}
-          >
-            Our Real-Time Stock Tracker's calibration feature enables hawkers to accurately measure and track the ingredients used to produce each menu item. This feature ensures that hawkers have accurate measurements and quantities of the ingredients and materials necessary to prepare their dishes. Calibration can be accomplished either with explicit numbers provided by the vendors or by analysing usage patterns over time. <br/>  <br/>           
-            Our Finance Tracker component generates financial reports for sellers. This feature enables vendors to analyse their financial performance, monitor their profitability, and trace their expenses. The financial reports provide an exhaustive summary of key financial metrics, such as revenue, expenses, profits, and other pertinent financial indicators. <br/> <br/> 
-            Our ‘Suppliers’ Ecommerce space is a multi-vendor ecommerce space where food suppliers can list their products upon registering as a supplier in our registration page.
-          </Typography> */}
-
-
+          variant="body2"
+          sx={{
+            fontSize: "18px",
+            fontWeight: "100",
+            color: "#5A6473",
+            textAlign: "center",
+          }}
+        >
+          New here? <br />
+          Our platform features 3 Main Features: Namely StockTracker,
+          FinanceTracker & Multi-Vendor(Suppliers) Ecommerce Space. <br />
+        </Typography>
       </Box>
+      <MainFeaturesContainer>
+        {isSupplier ? (
+          <div>
+            <Card sx={{ maxWidth: 350, height: 320 }}>
+              <CardActionArea>
+                <CardMedia component="img" height="140" image={stock} />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    StockTracker
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Our Real-Time Stock Tracker's calibration feature enables
+                    hawkers to accurately measure and track the ingredients used
+                    to produce each menu item.
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </div>
+        ) : (
+          <Link to={`/Stocktaking/`} style={{ textDecoration: "none" }}>
+            <Card sx={{ maxWidth: 350, height: 320 }}>
+              <CardActionArea>
+                <CardMedia component="img" height="140" image={stock} />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    StockTracker
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    This is a tracker which enables hawkers to accurately
+                    measure and track the ingredients used to produce each menu
+                    item.
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Link>
+        )}
 
+        {isSupplier ? (
+          <div>
+            <Card sx={{ maxWidth: 350, height: 320 }}>
+              <CardActionArea>
+                <CardMedia component="img" height="140" image={fin} />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    FinanceTracker
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    This is a tracker which generates financial reports for
+                    sellers, enabling hawkers to analyze their financial
+                    performance, monitor their profitability, and trace their
+                    expenses.
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </div>
+        ) : (
+          <Link to={`/finance/`} style={{ textDecoration: "none" }}>
+            <Card sx={{ maxWidth: 350, height: 320 }}>
+              <CardActionArea>
+                <CardMedia component="img" height="140" image={fin} />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    FinanceTracker
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    This is a tracker which generates financial reports for
+                    sellers, enabling hawkers to analyze their financial
+                    performance, monitor their profitability, and trace their
+                    expenses.
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Link>
+        )}
+
+        <Link to={`/suppliers/`} style={{ textDecoration: "none" }}>
+          <Card sx={{ maxWidth: 350, height: 320 }}>
+            <CardActionArea>
+              <CardMedia component="img" height="140" image={ecommerce} />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  Multi-Vendor Ecommerce
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  This is a marketplace where hawkers purchase ingredients and
+                  suppliers list their products. It allows for automatic update
+                  of inventory in the StockTracker upon the receival of orders.
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Link>
+      </MainFeaturesContainer>
+      <Typography
+        variant="body2"
+        sx={{
+          fontSize: "12px",
+          fontWeight: "100",
+          color: "#5A6473",
+          ml: 5,
+          mt: 3,
+        }}
+      >
+        *Supplier account will not have access to StockTracker and
+        FinanceTracker. <br />
+      </Typography>
     </>
   );
 }
