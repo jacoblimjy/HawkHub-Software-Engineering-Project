@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { Form, Button, FormFile } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@mui/material";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import FormContainer from "../components/FormContainer";
@@ -60,7 +61,6 @@ function ProductEditScreen({}) {
     loading: loadingUpdate,
     success: successUpdate,
   } = productUpdate;
-  
 
   useEffect(() => {
     if (successUpdate) {
@@ -242,7 +242,19 @@ function ProductEditScreen({}) {
               ></Form.Control>
             </Form.Group>
 
-            <Button type="submit" variant="primary">
+            <Button
+              variant="contained"
+              sx={{
+                color: "white",
+                backgroundColor: "#ff8000",
+                "&:hover": {
+                  backgroundColor: "orange",
+                  color: "white",
+                },
+              }}
+              type="submit"
+              className="my-1"
+            >
               Update
             </Button>
           </Form>

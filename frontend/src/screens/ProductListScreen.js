@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
-import { Table, Button, Row, Col } from "react-bootstrap";
+import { Table, Row, Col } from "react-bootstrap";
+import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import Loader from "../components/Loader";
@@ -70,9 +71,21 @@ function ProductListScreen({}) {
     <div>
       <Row className="align-items-center">
         <Col className="text-right ml-auto">
-          <Button className="my-3" onClick={createProductHandler}>
-            <i className="fas fa-plus"></i> Create Product
-          </Button>
+            <Button
+              variant="contained"
+              sx={{
+                color: "white",
+                backgroundColor: "#ff8000",
+                "&:hover": {
+                  backgroundColor: "orange",
+                  color: "white",
+                },
+              }}
+              onClick = {createProductHandler}
+              className="my-3"
+            >
+              <i className="fas fa-plus"></i> Create Product
+            </Button>
         </Col>
       </Row>
 
@@ -110,7 +123,9 @@ function ProductListScreen({}) {
                   <td>
                     {userInfo && ( // Add this condition to check if userInfo exists
                       <>
-                        <LinkContainer to={`/admin/${userInfo.supplier_id}/product/${product._id}/edit`}>
+                        <LinkContainer
+                          to={`/admin/${userInfo.supplier_id}/product/${product._id}/edit`}
+                        >
                           <Button variant="light" className="btn-sm">
                             <i className="fas fa-edit"></i>
                           </Button>

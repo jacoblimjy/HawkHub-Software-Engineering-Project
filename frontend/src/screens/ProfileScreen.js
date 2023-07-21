@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Form, Button, Row, Col, Table } from "react-bootstrap";
+import { Form, Row, Col, Table } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
@@ -242,7 +243,18 @@ function ProfileScreen({}) {
             ></Form.Control>
           </Form.Group>
 
-          <Button type="submit" variant="primary">
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              color: "white",
+              backgroundColor: "#ff8000",
+              "&:hover": {
+                backgroundColor: "grey",
+                color: "white",
+              },
+            }}
+          >
             Update
           </Button>
         </Form>
