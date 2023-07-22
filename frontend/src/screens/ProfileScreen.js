@@ -137,7 +137,7 @@ function ProfileScreen({}) {
         await dispatch(deliverOrder(order));
 
         const orderItems = order.orderItems;
-        // console.log("orderItems", orderItems);
+        console.log("orderItems", orderItems);
 
         for (let i = 0; i < orderItems.length; i++) {
           const orderItem = orderItems[i];
