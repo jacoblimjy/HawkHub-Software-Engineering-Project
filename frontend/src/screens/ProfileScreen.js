@@ -133,8 +133,8 @@ function ProfileScreen({}) {
   const receiveHandler = async (order) => {
     if (window.confirm("Confirm order received?")) {
       try {
-        // console.log("order", order);
-        // await dispatch(deliverOrder(order));
+        console.log("order", order);
+        await dispatch(deliverOrder(order));
 
         const orderItems = order.orderItems;
         // console.log("orderItems", orderItems);
