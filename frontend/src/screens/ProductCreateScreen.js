@@ -219,7 +219,7 @@ function ProductCreateScreen({}) {
             <Form.Label>Expiration Date</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter expiration date"
+              placeholder="Enter expiration date in YYYY-MM-DD"
               value={expirationDate}
               onChange={(e) => setExpirationDate(e.target.value)}
             ></Form.Control>
@@ -238,7 +238,7 @@ function ProductCreateScreen({}) {
             type="submit"
             className="my-1"
           >
-            Update
+            Create
           </Button>
         </Form>
       </FormContainer>
