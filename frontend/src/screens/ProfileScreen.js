@@ -134,7 +134,7 @@ function ProfileScreen({}) {
     if (window.confirm("Confirm order received?")) {
       try {
         // console.log("order", order);
-        await dispatch(deliverOrder(order));
+        // await dispatch(deliverOrder(order));
 
         const orderItems = order.orderItems;
         // console.log("orderItems", orderItems);

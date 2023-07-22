@@ -24,15 +24,14 @@ function LoginScreen({ history }) {
 
   useEffect(() => {
     if (userInfo) {
-      //history.push(redirect)
       navigate(redirect);
       dispatch(getSupplierByUserId(userInfo._id));
     }
-  }, [navigate, userInfo, redirect]); //what useEffect does here is that it first checks if userInfo exists, if it does, then it redirects the user to the redirect page, if it doesn't, then it does nothing, insert [history, userInfo, redirect] as the second argument to useEffect so that it only runs when one of these variables changes
+  }, [navigate, userInfo, redirect]); 
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(login(email, password)); //dispatch the login action, which takes in the email and password as parameters
+    dispatch(login(email, password)); 
   };
 
   return (
@@ -40,7 +39,7 @@ function LoginScreen({ history }) {
       <h1>Sign In</h1>
       <Form onSubmit={submitHandler}>
         {error && <Message variant="danger">{error}</Message>}
-        {loading && <Loader />} {/*if it is loading, display the loader*/}
+        {loading && <Loader />} 
         <Form.Group controlId="email">
           <Form.Label>Email Address</Form.Label>
           <Form.Control

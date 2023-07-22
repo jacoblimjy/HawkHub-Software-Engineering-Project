@@ -12,6 +12,7 @@ from base.serializers import ProductSerializer
 from rest_framework import status
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getProducts(request):
     products = Product.objects.all()
     serializer = ProductSerializer(products, many=True)
@@ -27,28 +28,36 @@ def getProduct(request, pk):  # pk is passed in from the url from urls.py
 
 
 @api_view(['DELETE'])
-# @permission_classes([IsAdminUser])
+#@permission_classes([IsAdminUser])
 def deleteProduct(request, pk):
     product = Product.objects.get(_id=pk)
     product.delete()
     return Response('Product Deleted')
 
 @api_view(['POST'])
-# @permission_classes([IsAdminUser])
+@permission_classes([IsAuthenticated])  
 def createProduct(request):
     user = request.user
-    supplier = user.supplier_set.get() #this is the supplier that is logged in and creating the product, get() is used because we are only getting one supplier
+    supplier = user.supplier_set.get() 
+    
+    data = request.data
+    name = data.get('name', '')
+    price = data.get('price', 0)
+    countInStock = data.get('countInStock', 0)
+    category = data.get('category', '')
+    description = data.get('description', '')
+    expirationDate = data.get('expirationDate', '')
+    unit = data.get('unit', '')
 
     product = Product.objects.create(
-        supplier= supplier,
-        name='Sample Name',
-        price=0,
-        # brand = 'Sample Brand',
-        countInStock=0,
-        category='Sample Category',
-        description='',
-        expirationDate='2023-12-12',
-        unit = ''
+        supplier=supplier,
+        name=name,
+        price=price,
+        countInStock=countInStock,
+        category=category,
+        description=description,
+        expirationDate=expirationDate,
+        unit=unit
     )
 
     serializer = ProductSerializer(product, many=False)

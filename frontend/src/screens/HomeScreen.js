@@ -9,7 +9,7 @@ import {
   CardActionArea,
 } from "@mui/material";
 import { Container } from "@mui/system";
-import React from "react";
+import React, { useEffect } from "react";
 import hawkhubplus from "../assets/hawkhubplus.png";
 import star from "../assets/Star.png";
 import hawker from "../assets/hawker.webp";
@@ -71,6 +71,10 @@ function HomeScreen() {
   const { userInfo } = userLogin;
   const isSupplier = userInfo?.isSupplier;
 
+  useEffect(() => {
+    console.log(userInfo);
+  }, [userInfo]);
+  
   return (
     <>
       <Box sx={{ backgroundColor: "#faf6f0", minHeight: "80vh" }}>

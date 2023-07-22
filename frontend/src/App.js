@@ -17,6 +17,7 @@ import PaymentScreen from "./screens/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
 import ProductListScreen from "./screens/ProductListScreen";
+import ProductCreateScreen from "./screens/ProductCreateScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
 import FinanceScreen from "./screens/FinanceScreen";
 import PointOfSalesScreen from "./screens/PointOfSalesScreen";
@@ -56,6 +57,10 @@ const App = () => {
               <Route
                 path="/admin/productlist"
                 element={<ProductListScreen />}
+              />
+              <Route
+                path="/admin/:supplierId/product/create"
+                element={<ProductCreateScreen />}
               />
               <Route
                 path="/admin/:supplierId/product/:productId/edit"

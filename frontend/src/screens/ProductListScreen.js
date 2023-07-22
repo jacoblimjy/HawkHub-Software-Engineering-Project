@@ -63,8 +63,12 @@ function ProductListScreen({}) {
     }
   };
 
+  // const createProductHandler = () => {
+  //   dispatch(createProduct());
+  // };
+
   const createProductHandler = () => {
-    dispatch(createProduct());
+    navigate(`/admin/${userInfo.supplier_id}/product/create`)
   };
 
   return (
@@ -81,7 +85,8 @@ function ProductListScreen({}) {
                   color: "white",
                 },
               }}
-              onClick = {createProductHandler}
+              // onClick = {createProductHandler}
+              onClick={createProductHandler}
               className="my-3"
             >
               <i className="fas fa-plus"></i> Create Product
@@ -153,3 +158,4 @@ function ProductListScreen({}) {
 }
 
 export default ProductListScreen;
+

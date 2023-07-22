@@ -90,7 +90,7 @@ class OrderItem(models.Model):
         max_digits=7, decimal_places=2, null=True, blank=True)
     image = models.CharField(max_length=200, null=True, blank=True)
     _id = models.AutoField(primary_key=True, editable=False)
-    
+    #Do not include below for ER Diagram
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     expirationDate = models.DateField(auto_now_add=False, null=True, blank=True, default= '2023-12-12')
     unit = models.CharField(max_length=200, null=True, blank=True)
