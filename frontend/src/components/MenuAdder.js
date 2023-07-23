@@ -63,7 +63,7 @@ export default function MenuAdder() {
               <TextField
                 required
                 error={name === ""}
-                label="Ingredient Name"
+                label="Menu Name"
                 id="name"
                 size="small"
                 sx={{ width: 1 / 2, m: 1 }}
