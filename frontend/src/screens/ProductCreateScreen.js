@@ -41,7 +41,7 @@ function ProductCreateScreen({}) {
 
   const [name, setName] = useState("Sample Name");
   const [price, setPrice] = useState(0);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
   const [category, setCategory] = useState(categoryOptions[0]);
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
@@ -74,18 +74,17 @@ function ProductCreateScreen({}) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(
-      createProduct({
-        name,
-        price,
-        image,
-        category,
-        countInStock,
-        description,
-        expirationDate,
-        unit,
-      })
-    );
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("price", price);
+    formData.append("image", image);
+    formData.append("category", category);
+    formData.append("countInStock", countInStock);
+    formData.append("description", description);
+    formData.append("expirationDate", expirationDate);
+    formData.append("unit", unit);
+
+    dispatch(createProduct(formData));
   };
 
   // const uploadFileHandler = async (e) => {
@@ -142,7 +141,10 @@ function ProductCreateScreen({}) {
               type="text"
               placeholder="Image"
               value={image}
-              onChange={(e) => setImage(e.target.value)}
+              onChange={(e) => {
+                setImage(e.target.files[0]);
+                // console.log(image);
+              }}
             />
 
             {/* <Form.Label className="mx-2"> Upload Image: </Form.Label>  */}
@@ -150,7 +152,10 @@ function ProductCreateScreen({}) {
               type="file"
               id="image-file"
               label="Choose File"
-              onChange={(e) => setImage(e.target.files[0])}
+              onChange={(e) => {
+                setImage(e.target.files[0]);
+                // console.log(image);
+              }}
             />
             {uploading && <Loader />}
           </Form.Group>
