@@ -48,6 +48,7 @@ def createProduct(request):
     description = data.get('description', '')
     expirationDate = data.get('expirationDate', '')
     unit = data.get('unit', '')
+    
 
     product = Product.objects.create(
         supplier=supplier,

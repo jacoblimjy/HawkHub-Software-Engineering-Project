@@ -88,33 +88,33 @@ function ProductCreateScreen({}) {
     );
   };
 
-  const uploadFileHandler = async (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
+  // const uploadFileHandler = async (e) => {
+  //   const file = e.target.files[0];
+  //   const formData = new FormData();
 
-    formData.append("image", file);
+  //   formData.append("image", file);
 
-    setUploading(true);
+  //   setUploading(true);
 
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
+  //   try {
+  //     const config = {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     };
 
-      const { data } = await axios.post(
-        "/api/products/upload/",
-        formData,
-        config
-      );
+  //     const { data } = await axios.post(
+  //       "/api/products/upload/",
+  //       formData,
+  //       config
+  //     );
 
-      setImage(data);
-      setUploading(false);
-    } catch (error) {
-      setUploading(false);
-    }
-  };
+  //     setImage(data);
+  //     setUploading(false);
+  //   } catch (error) {
+  //     setUploading(false);
+  //   }
+  // };
 
   return (
     <div>
@@ -150,10 +150,11 @@ function ProductCreateScreen({}) {
               type="file"
               id="image-file"
               label="Choose File"
-              onChange={uploadFileHandler}
+              onChange={(e) => setImage(e.target.files[0])}
             />
             {uploading && <Loader />}
           </Form.Group>
+
 
           <Form.Group controlId="price">
             <Form.Label>Price</Form.Label>
