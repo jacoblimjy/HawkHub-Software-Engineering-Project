@@ -41,6 +41,7 @@ def createProduct(request):
     supplier = user.supplier_set.get() 
     
     data = request.data
+    print(data)
     name = data.get('name', '')
     price = data.get('price', 0)
     countInStock = data.get('countInStock', 0)
@@ -48,6 +49,7 @@ def createProduct(request):
     description = data.get('description', '')
     expirationDate = data.get('expirationDate', '')
     unit = data.get('unit', '')
+    
 
     product = Product.objects.create(
         supplier=supplier,
@@ -57,7 +59,8 @@ def createProduct(request):
         category=category,
         description=description,
         expirationDate=expirationDate,
-        unit=unit
+        unit=unit,
+        image = request.FILES.get('image')
     )
 
     serializer = ProductSerializer(product, many=False)
@@ -87,6 +90,7 @@ def updateProduct(request, pk):
 @api_view(['POST'])
 def uploadImage(request):
     data = request.data
+    print(data)
     product_id = data['product_id']
     product = Product.objects.get(_id=product_id)
 

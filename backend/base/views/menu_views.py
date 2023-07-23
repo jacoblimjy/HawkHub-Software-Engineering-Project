@@ -161,7 +161,7 @@ def sellMenuItem(request):
             ingredient.countInStock -= menuIngredient.quantity * num_Sold
             ingredient.save()
             cost += float(ingredient.cost) * menuIngredient.quantity * num_Sold
-            if ingredient.countInStock < 0:
+            if ingredient.countInStock <= 0:
                 if not Notification.objects.filter(user = request.user, subject= "Out of Stock", message = ingredient.name + " is out of stock.", date = date.today()).exists():
                     notification = Notification.objects.create(user = request.user, subject= "Out of Stock", message = ingredient.name + " is out of stock.", date = date.today())
                     channel_layer = get_channel_layer()
