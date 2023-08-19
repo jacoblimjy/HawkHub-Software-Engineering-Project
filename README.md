@@ -17,4 +17,4 @@ https://hawkhub.onrender.com/
 Create your own account or use:
 * Hawker: hawker@gmail.com 
 * Supplier: supplier@gmail.com
-Password: test123
+* Password: test123
