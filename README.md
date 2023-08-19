@@ -12,9 +12,14 @@
 ![Poster](./images/Poster.jpg)
 ### Video
 [Application's Video](https://drive.google.com/file/d/1-47e0UwQiMpwt80E0N7EjgsuDeLAsX1Z/view?usp=drive_link)
-### Website
-* https://hawkhub.onrender.com/ 
-* Create your own account or use:
-* Hawker: hawker@gmail.com 
-* Supplier: supplier@gmail.com
-* Password: test123
+### Website:
+https://hawkhub.onrender.com/ 
+
+### Credentials:
+**Hawker Account**
+Email: hawker@gmail.com 
+Password: test123
+
+**Supplier Account**
+Email: supplier@gmail.com
+Password: test123
