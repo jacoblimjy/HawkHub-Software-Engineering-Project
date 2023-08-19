@@ -11,4 +11,4 @@
 ### Software Engineering Project
 ![Poster](./images/Poster.jpg)
 ### Video
-[Introduction and Walkthrough](https://drive.google.com/file/d/1-47e0UwQiMpwt80E0N7EjgsuDeLAsX1Z/view?usp=drive_link)
+[Application's Video](https://drive.google.com/file/d/1-47e0UwQiMpwt80E0N7EjgsuDeLAsX1Z/view?usp=drive_link)
