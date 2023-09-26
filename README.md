@@ -7,7 +7,7 @@
 ### Proposal
 * Link to documentation : [Here](https://docs.google.com/document/d/1VQNtV1cnkjwhEdWeBjb4UvMrtX3jeXODyBoprtAoZ4M/edit#)
 
-### Software Engineering Project
+### Software Engineering Projec
 ![Poster](./images/Poster.jpg)
 ### Video
 [Application's Video](https://drive.google.com/file/d/1-47e0UwQiMpwt80E0N7EjgsuDeLAsX1Z/view?usp=drive_link)
