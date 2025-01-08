@@ -5,7 +5,7 @@
 * Yow Siao Kang
 
 ### Proposal
-* Link to documentation : [Here]([https://docs.google.com/document/d/1VQNtV1cnkjwhEdWeBjb4UvMrtX3jeXODyBoprtAoZ4M/edit#](https://drive.google.com/file/d/1uUjiZLWuep9u0Gwr5wBUskPbwOH_SPUa/view?usp=sharing))
+* Link to documentation : [Here](https://docs.google.com/document/d/1VQNtV1cnkjwhEdWeBjb4UvMrtX3jeXODyBoprtAoZ4M/edit#](https://drive.google.com/file/d/1uUjiZLWuep9u0Gwr5wBUskPbwOH_SPUa/view?usp=sharing)
 
 ### Software Engineering Project
 ![Poster](./images/Poster.jpg)
